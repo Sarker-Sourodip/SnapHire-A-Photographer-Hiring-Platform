@@ -26,7 +26,7 @@ from accounts.views import custom_403_view
 # ----------------------------------------
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     path('', include('core.urls')),
     
     # If your login/register paths are in a separate accounts app, 

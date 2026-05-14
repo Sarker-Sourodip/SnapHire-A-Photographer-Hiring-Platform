@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.db.models import Avg, Count
 from functools import wraps
 
-from .forms import RegistrationForm, LoginForm, PhotographerForm, PortfolioForm, ReviewForm, BookingForm
+from .forms import RegistrationForm, LoginForm, PhotographerForm, PortfolioForm, ReviewForm, BookingForm, PhotographerUpdateForm, ProfileUpdateForm
 from .models import Photographer, Profile, Portfolio, Booking, Review
 
 # --- NEW: Import the Service ---
@@ -37,14 +37,22 @@ def register(request):
         return redirect_to_dashboard(request)
 
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        # MUST INCLUDE request.FILES for the profile picture!
+        form = RegistrationForm(request.POST, request.FILES) 
         if form.is_valid():
-            # Use the Single Channel
+            # Pass all the new data to the service
             user, created = create_user_safely(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1'],
                 email=form.cleaned_data['email'],
-                role=form.cleaned_data['role']
+                role=form.cleaned_data['role'],
+                phone=form.cleaned_data.get('phone'),
+                address=form.cleaned_data.get('address'),
+                profile_picture=form.cleaned_data.get('profile_picture'),
+                bio=form.cleaned_data.get('bio'),
+                experience_years=form.cleaned_data.get('experience_years'),
+                price_per_hour=form.cleaned_data.get('price_per_hour'),
+                location=form.cleaned_data.get('location')
             )
 
             if not created:
@@ -56,8 +64,7 @@ def register(request):
             request.session['role'] = user.profile.role
             messages.success(request, 'Registration successful!')
             
-            if request.session['role'] == 'photographer':
-                return redirect('photographer_setup')
+            # Since they did everything on one page, skip setup and go straight to dashboard
             return redirect_to_dashboard(request)
     else:
         form = RegistrationForm()
@@ -103,16 +110,24 @@ def photographer_setup(request):
         raise PermissionDenied
 
     photographer, created = Photographer.objects.get_or_create(user=request.user)
+    
     if request.method == 'POST':
-        form = PhotographerForm(request.POST, instance=photographer)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Photographer profile saved.')
-            return redirect('home')
+        # Grab data for both forms
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        ph_form = PhotographerUpdateForm(request.POST, instance=photographer)
+        
+        if p_form.is_valid() and ph_form.is_valid():
+            p_form.save()
+            ph_form.save()
+            messages.success(request, 'Profile settings updated successfully!')
+            return redirect('photographer_dashboard')
     else:
-        form = PhotographerForm(instance=photographer)
+        # Pre-fill with existing data
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+        ph_form = PhotographerUpdateForm(instance=photographer)
 
-    return render(request, 'accounts/photographer_setup.html', {'form': form})
+    # Pass BOTH forms to the template
+    return render(request, 'accounts/photographer_setup.html', {'p_form': p_form, 'ph_form': ph_form})
 
 
 @login_required
@@ -123,9 +138,14 @@ def photographer_dashboard(request):
 
     photographer, created = Photographer.objects.get_or_create(user=request.user)
     portfolios = Portfolio.objects.filter(photographer=photographer)
+    
+    # NEW: Get all bookings for this photographer, newest first
+    bookings = Booking.objects.filter(photographer=photographer).order_by('-created_at')
+
     return render(request, 'accounts/photographer_dashboard.html', {
         'photographer': photographer,
         'portfolios': portfolios,
+        'bookings': bookings, # Pass bookings to the HTML
     })
 
 
@@ -200,17 +220,35 @@ def portfolio_delete(request, pk):
 
 def photographers_list(request):
     photographers = (
-        Photographer.objects.select_related('user').filter(user__profile__role='photographer').prefetch_related('portfolio_set').annotate(portfolio_count=Count('portfolio'),avg_rating=Avg('booking__review__rating'),).order_by('-avg_rating', '-portfolio_count')
+        Photographer.objects.select_related('user')
+        .filter(user__profile__role='photographer')
+        .prefetch_related('portfolio_set')
+        .annotate(
+            portfolio_count=Count('portfolio'),
+            # CHANGED: 'booking' is now 'photographer_bookings'
+            avg_rating=Avg('photographer_bookings__review__rating'),
+        )
+        .order_by('-avg_rating', '-portfolio_count')
     )
-    return render(request, 'core/photographers.html', {'photographers': photographers})
+    return render(request, 'accounts/photographers.html', {'photographers': photographers})
 
 
 def photographer_public(request, pk):
     photographer = get_object_or_404(Photographer, pk=pk)
     portfolios = Portfolio.objects.filter(photographer=photographer)
+    
+    # NEW: Fetch all reviews for this photographer, newest first
+    # select_related makes the database query much faster since we need the client's username
+    reviews = Review.objects.filter(booking__photographer=photographer).select_related('booking__client').order_by('-created_at')
+    
+    # NEW: Calculate the average rating (out of 5)
+    avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
+
     return render(request, 'accounts/photographer_public.html', {
         'photographer': photographer,
         'portfolios': portfolios,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
     })
 
 
@@ -226,6 +264,27 @@ def client_dashboard(request):
         has_review = hasattr(b, 'review')
         bookings.append({'obj': b, 'has_review': has_review})
     return render(request, 'accounts/client_dashboard.html', {'bookings': bookings})
+
+
+@login_required
+@never_cache
+def client_setup(request):
+    if request.session.get('role') != 'client':
+        raise PermissionDenied
+
+    if request.method == 'POST':
+        # We can reuse the exact same ProfileUpdateForm we made earlier!
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('client_dashboard')
+    else:
+        # Pre-fill the form with their current data
+        form = ProfileUpdateForm(instance=request.user.profile)
+
+    return render(request, 'accounts/client_setup.html', {'form': form})
 
 
 def developer_required(func):
@@ -314,6 +373,8 @@ def add_review(request, booking_pk):
         form = ReviewForm()
 
     return render(request, 'accounts/review_form.html', {'form': form, 'booking': booking})
+
+
 @login_required
 def book_photographer(request, photographer_id):
     # --- NEW SECURITY CHECK ---
@@ -349,7 +410,7 @@ def book_photographer(request, photographer_id):
         'form': form,
         'photographer': photographer
     }
-    return render(request, 'book_photographer.html', context)
+    return render(request, 'accounts/book_photographer.html', context)
 
 
 @login_required
@@ -380,3 +441,21 @@ def add_review(request, booking_pk):
         form = ReviewForm()
 
     return render(request, 'accounts/review_form.html', {'form': form, 'booking': booking})
+
+
+@login_required
+def update_booking_status(request, booking_id, status):
+    """ Allows photographers to accept or reject a booking """
+    if request.session.get('role') != 'photographer':
+        raise PermissionDenied
+    
+    # Ensure they only edit THEIR bookings
+    booking = get_object_or_404(Booking, id=booking_id, photographer__user=request.user)
+    
+    # Security check: only allow valid statuses
+    if status in ['accepted', 'rejected', 'completed']:
+        booking.status = status
+        booking.save()
+        messages.success(request, f"Booking has been marked as {status.title()}!")
+        
+    return redirect('photographer_dashboard')
