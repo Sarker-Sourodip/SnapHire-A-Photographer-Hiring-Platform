@@ -14,7 +14,3 @@ def about(request):
 @never_cache  # <-- NEW
 def contact(request):
     return render(request, 'core/contact.html')
-
-@never_cache  # <-- NEW
-def photographers(request):
-    return render(request, 'core/photographers.html')

@@ -21,27 +21,33 @@
                     <form method="POST" action="">
                         {% csrf_token %}
                         
+                        <br>
+                        <br>
                         <!-- Render the form fields based on our widgets in forms.py -->
                         <div class="mb-3">
                             <label class="form-label fw-bold">Event Date</label>
                             {{ form.event_date }}
                         </div>
-
+                        <br>
+                        <br>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Type of Event</label>
                             {{ form.event_type }}
                         </div>
-
+                        <br>
+                        <br>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Location</label>
                             {{ form.location }}
                         </div>
-
+                        <br>
+                        <br>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Message / Details</label>
                             {{ form.message }}
                         </div>
-
+                        <br>
+                        <br>
                         <button type="submit" class="btn btn-success w-100 mt-3">
                             Send Booking Request
                         </button>

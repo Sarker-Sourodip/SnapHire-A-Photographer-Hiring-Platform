@@ -13,9 +13,11 @@ urlpatterns = [
     path('photographer/portfolio/<int:pk>/delete/', views.portfolio_delete, name='portfolio_delete'),
     path('photographers/', views.photographers_list, name='photographers_list'),
     path('photographers/<int:pk>/', views.photographer_public, name='photographer_public'),
+    path('client/setup/', views.client_setup, name='client_setup'),
     path('developer/dashboard/', views.developer_dashboard, name='developer_dashboard'),
     path('developer/user/<int:user_pk>/delete/', views.developer_delete_user, name='developer_delete_user'),
     path('client/dashboard/', views.client_dashboard, name='client_dashboard'),
+    path('booking/<int:booking_id>/update/<str:status>/', views.update_booking_status, name='update_booking_status'),
     path('booking/<int:booking_pk>/review/', views.add_review, name='add_review'),
     path('book/<int:photographer_id>/', views.book_photographer, name='book_photographer'),
 ]

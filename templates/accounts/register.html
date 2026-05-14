@@ -1,55 +1,73 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Register
-{% endblock %}
-
 {% block content %}
-<h1>Register</h1>
+<div class="container mt-5">
+    <h2>Register</h2>
+    
+    <!-- enctype is REQUIRED for image uploads -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Render User & Profile Fields -->
+        {{ form.username.label_tag }} {{ form.username }}
+        <br><br>
+        {{ form.email.label_tag }} {{ form.email }}
+        <br><br>
+        {{ form.password1.label_tag }} {{ form.password1 }}
+        <br><br>
+        {{ form.password_confirm.label_tag }} {{ form.password_confirm }}
+        <br><br>
+        
+        <hr>
+        <h4>Profile Details</h4>
+        <br>
+        {{ form.role.label_tag }} {{ form.role }}
+        <br><br>
+        {{ form.phone.label_tag }} {{ form.phone }}
+        <br><br>
+        {{ form.address.label_tag }} {{ form.address }}
+        <br><br>
+        {{ form.profile_picture.label_tag }} {{ form.profile_picture }}
+        <br><br>
 
-{% if messages %}
-    {% for message in messages %}
-        <div class="message {{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-{% endif %}
+        <!-- PHOTOGRAPHER ONLY FIELDS (Wrapped in a div we can hide) -->
+        <div id="photographer-fields" style="display: none;" class="mt-4 p-3 bg-light border rounded">
+            <h4 class="text-primary">Photographer Details</h4>
+            <p class="text-muted small">Required to list your services.</p>
+            
+            <br><br>
+            {{ form.bio.label_tag }} {{ form.bio }}
+            <br><br>
+            {{ form.location.label_tag }} {{ form.location }}
+            <br><br>
+            {{ form.price_per_hour.label_tag }} {{ form.price_per_hour }}
+            <br><br>
+            {{ form.experience_years.label_tag }} {{ form.experience_years }}
+        </div>
 
-<form method="POST">
-    {% csrf_token %}
+        <button type="submit" class="btn btn-success mt-4">Create Account</button>
+    </form>
+</div>
 
-    {{ form.non_field_errors }}
+<!-- The JavaScript to toggle the fields -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const roleSelect = document.getElementById('role-select'); // ID from widgets in forms.py
+        const photographerFields = document.getElementById('photographer-fields');
 
-    <p>
-        {{ form.username.label_tag }}<br>
-        {{ form.username }}
-        {{ form.username.errors }}
-    </p>
+        function toggleFields() {
+            if (roleSelect.value === 'photographer') {
+                photographerFields.style.display = 'block';
+            } else {
+                photographerFields.style.display = 'none';
+            }
+        }
 
-    <p>
-        {{ form.email.label_tag }}<br>
-        {{ form.email }}
-        {{ form.email.errors }}
-    </p>
+        // Run on page load (in case of form validation errors preserving the selection)
+        toggleFields();
 
-    <p>
-        {{ form.password1.label_tag }}<br>
-        {{ form.password1 }}
-        {{ form.password1.errors }}
-    </p>
-
-    <p>
-        {{ form.password2.label_tag }}<br>
-        {{ form.password2 }}
-        {{ form.password2.errors }}
-    </p>
-
-    <p>
-        {{ form.role.label_tag }}<br>
-        {{ form.role }}
-        {{ form.role.errors }}
-    </p>
-
-    <button type="submit">Register</button>
-    <button type="reset">Clear</button>
-</form>
-
+        // Run every time the dropdown changes
+        roleSelect.addEventListener('change', toggleFields);
+    });
+</script>
 {% endblock %}
