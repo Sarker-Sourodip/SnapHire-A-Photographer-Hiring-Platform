@@ -3,11 +3,11 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Register</h2>
-    
+
     <!-- enctype is REQUIRED for image uploads -->
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        
+
         <!-- Render User & Profile Fields -->
         {{ form.username.label_tag }} {{ form.username }}
         <br><br>
@@ -17,11 +17,17 @@
         <br><br>
         {{ form.password_confirm.label_tag }} {{ form.password_confirm }}
         <br><br>
-        
+
         <hr>
         <h4>Profile Details</h4>
         <br>
-        {{ form.role.label_tag }} {{ form.role }}
+        <label for="role-select" class="form-label">Role:</label>
+        <select name="role" class="form-select" id="role-select" required>
+            <!-- Notice the spaces around the == signs below! -->
+            <option value="client" {% if form.role.value=='client' %}selected{% endif %}>Client</option>
+            <option value="photographer" {% if form.role.value=='photographer' %}selected{% endif %}>Photographer
+            </option>
+        </select>
         <br><br>
         {{ form.phone.label_tag }} {{ form.phone }}
         <br><br>
@@ -34,7 +40,7 @@
         <div id="photographer-fields" style="display: none;" class="mt-4 p-3 bg-light border rounded">
             <h4 class="text-primary">Photographer Details</h4>
             <p class="text-muted small">Required to list your services.</p>
-            
+
             <br><br>
             {{ form.bio.label_tag }} {{ form.bio }}
             <br><br>
@@ -51,7 +57,7 @@
 
 <!-- The JavaScript to toggle the fields -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const roleSelect = document.getElementById('role-select'); // ID from widgets in forms.py
         const photographerFields = document.getElementById('photographer-fields');
 
