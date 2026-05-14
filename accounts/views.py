@@ -3,17 +3,15 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
-from functools import wraps
-
-from .forms import RegistrationForm, LoginForm, PhotographerForm, PortfolioForm
-from .models import Photographer, Profile, Portfolio
-from .models import Booking, Review
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
-from .forms import ReviewForm
 from django.db.models import Avg, Count
+from functools import wraps
+
+from .forms import RegistrationForm, LoginForm, PhotographerForm, PortfolioForm, ReviewForm, BookingForm
+from .models import Photographer, Profile, Portfolio, Booking, Review
 
 # --- NEW: Import the Service ---
 from .services import create_user_safely
@@ -230,36 +228,6 @@ def client_dashboard(request):
     return render(request, 'accounts/client_dashboard.html', {'bookings': bookings})
 
 
-@login_required
-@never_cache
-def add_review(request, booking_pk):
-    if request.session.get('role') != 'client':
-        raise PermissionDenied
-
-    booking = get_object_or_404(Booking, pk=booking_pk)
-    if booking.client != request.user:
-        raise PermissionDenied
-    if booking.status != 'completed':
-        messages.error(request, 'You can only review completed bookings.')
-        return redirect('client_dashboard')
-    if hasattr(booking, 'review'):
-        messages.error(request, 'This booking already has a review.')
-        return redirect('client_dashboard')
-
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.booking = booking
-            review.save()
-            messages.success(request, 'Review submitted.')
-            return redirect('client_dashboard')
-    else:
-        form = ReviewForm()
-
-    return render(request, 'accounts/review_form.html', {'form': form, 'booking': booking})
-
-
 def developer_required(func):
     @wraps(func)
     def wrapper(request, *args, **kwargs):
@@ -316,3 +284,99 @@ def custom_403_view(request, exception=None):
     if request.user.is_authenticated:
         return redirect_to_dashboard(request)
     return redirect('login')
+
+
+@login_required
+@never_cache
+def add_review(request, booking_pk):
+    if request.session.get('role') != 'client':
+        raise PermissionDenied
+
+    booking = get_object_or_404(Booking, pk=booking_pk)
+    if booking.client != request.user:
+        raise PermissionDenied
+    if booking.status != 'completed':
+        messages.error(request, 'You can only review completed bookings.')
+        return redirect('client_dashboard')
+    if hasattr(booking, 'review'):
+        messages.error(request, 'This booking already has a review.')
+        return redirect('client_dashboard')
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.booking = booking
+            review.save()
+            messages.success(request, 'Review submitted.')
+            return redirect('client_dashboard')
+    else:
+        form = ReviewForm()
+
+    return render(request, 'accounts/review_form.html', {'form': form, 'booking': booking})
+@login_required
+def book_photographer(request, photographer_id):
+    # --- NEW SECURITY CHECK ---
+    # 1. Block photographers from acting as clients
+    if request.user.profile.role == 'photographer':
+        messages.error(request, "Access Denied: Photographer accounts cannot book other photographers. Please log in as a Client.")
+        # Redirect them away (change 'home' to your actual home or dashboard URL name)
+        return redirect('home') 
+
+    # 2. Find the photographer they are trying to book
+    photographer = get_object_or_404(Photographer, id=photographer_id)
+
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            # commit=False creates the object in memory, but doesn't hit the database yet
+            booking = form.save(commit=False)
+            
+            # Securely attach the 'Behind the Scenes' IDs
+            booking.client = request.user
+            booking.photographer = photographer
+            
+            # Save it to the database
+            booking.save()
+            
+            messages.success(request, f"Your booking request has been sent to {photographer.user.username}!")
+            return redirect('client_dashboard') # Change this to wherever they should go
+    else:
+        # Show an empty form
+        form = BookingForm()
+
+    context = {
+        'form': form,
+        'photographer': photographer
+    }
+    return render(request, 'book_photographer.html', context)
+
+
+@login_required
+@never_cache
+def add_review(request, booking_pk):
+    if request.session.get('role') != 'client':
+        raise PermissionDenied
+
+    booking = get_object_or_404(Booking, pk=booking_pk)
+    if booking.client != request.user:
+        raise PermissionDenied
+    if booking.status != 'completed':
+        messages.error(request, 'You can only review completed bookings.')
+        return redirect('client_dashboard')
+    if hasattr(booking, 'review'):
+        messages.error(request, 'This booking already has a review.')
+        return redirect('client_dashboard')
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.booking = booking
+            review.save()
+            messages.success(request, 'Review submitted.')
+            return redirect('client_dashboard')
+    else:
+        form = ReviewForm()
+
+    return render(request, 'accounts/review_form.html', {'form': form, 'booking': booking})
