@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Photographer Setup
+{% endblock %}
+
+{% block content %}
+<h1>Photographer Profile Setup</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <p>
+        {{ form.bio.label_tag }}<br>
+        {{ form.bio }}
+        {{ form.bio.errors }}
+    </p>
+
+    <p>
+        {{ form.experience_years.label_tag }}<br>
+        {{ form.experience_years }}
+        {{ form.experience_years.errors }}
+    </p>
+
+    <p>
+        {{ form.price_per_hour.label_tag }}<br>
+        {{ form.price_per_hour }}
+        {{ form.price_per_hour.errors }}
+    </p>
+
+    <p>
+        {{ form.location.label_tag }}<br>
+        {{ form.location }}
+        {{ form.location.errors }}
+    </p>
+
+    <button type="submit">Save</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Photographer Dashboard
+{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ request.user.username }}</h1>
+
+<p><a href="{% url 'photographer_setup' %}">Edit Profile</a> | <a href="{% url 'portfolio_list' %}">Manage Portfolio</a></p>
+
+<h2>Your Profile</h2>
+<p>Bio: {{ photographer.bio }}</p>
+<p>Experience: {{ photographer.experience_years }} years</p>
+<p>Price: {{ photographer.price_per_hour }}</p>
+<p>Location: {{ photographer.location }}</p>
+
+<h2>Portfolio</h2>
+<ul>
+    {% for p in portfolios %}
+        <li>
+            {% if p.image %}<img src="{{ p.image.url }}" alt="" width="120">{% endif %}
+            {{ p.description }}
+            - <a href="{% url 'portfolio_edit' p.pk %}">Edit</a>
+            - <a href="{% url 'portfolio_delete' p.pk %}">Delete</a>
+        </li>
+    {% empty %}
+        <li>No portfolio items yet. <a href="{% url 'portfolio_create' %}">Add one</a>.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

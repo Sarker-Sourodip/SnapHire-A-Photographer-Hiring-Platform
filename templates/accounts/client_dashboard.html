@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Client Dashboard{% endblock %}
+
+{% block content %}
+<h1>Your Bookings</h1>
+
+<table>
+    <thead>
+        <tr><th>Photographer</th><th>Event Date</th><th>Type</th><th>Location</th><th>Status</th><th>Review</th></tr>
+    </thead>
+    <tbody>
+    {% for item in bookings %}
+        {% with b=item.obj %}
+        <tr>
+            <td>{{ b.photographer.user.username }}</td>
+            <td>{{ b.event_date }}</td>
+            <td>{{ b.event_type }}</td>
+            <td>{{ b.location }}</td>
+            <td>{{ b.status }}</td>
+            <td>
+                {% if b.status == 'completed' and not item.has_review %}
+                    <a href="{% url 'add_review' b.pk %}">Add review</a>
+                {% elif item.has_review %}
+                    <a href="#">View review</a>
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        {% endwith %}
+    {% empty %}
+        <tr><td colspan="6">You have no bookings.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
