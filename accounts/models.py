@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, post_delete, pre_save
+from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
-from django.db import IntegrityError # Added to handle collisions
 import logging
 
 logger = logging.getLogger(__name__)
@@ -49,14 +48,26 @@ class Booking(models.Model):
         ('completed', 'Completed'),
     )
 
+    PAYMENT_CHOICES = (
+        ('unpaid', 'Unpaid'),
+        ('partial', 'Partial Deposit'),
+        ('paid', 'Fully Paid'),
+        ('refunded', 'Refunded'),
+    )
+
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_bookings')
-    photographer = models.ForeignKey(Photographer, on_delete=models.CASCADE)
+    photographer = models.ForeignKey(Photographer, on_delete=models.CASCADE, related_name='photographer_bookings')
+    
     event_date = models.DateField()
     event_type = models.CharField(max_length=100)
     location = models.CharField(max_length=200)
     message = models.TextField(blank=True, null=True)
+    
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='unpaid')
+    
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.client.username} → {self.photographer.user.username}"
@@ -70,39 +81,7 @@ class Review(models.Model):
     def __str__(self):
         return f"Review for {self.booking.photographer.user.username}"
 
-# --- IMPROVED SIGNALS ---
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        try:
-            # We use a try-except block here. 
-            # If the Admin Inline already created the profile, 
-            # the database will throw an IntegrityError. 
-            # We "catch" it and simply 'pass' (do nothing).
-            Profile.objects.create(user=instance)
-        except Exception:
-            # Profile already exists? No problem. Just keep moving.
-            pass
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    """
-    Ensures that when the User is saved, the Profile is also updated.
-    """
-    if hasattr(instance, 'profile'):
-        instance.profile.save()
-
-@receiver(post_save, sender=Profile)
-def create_photographer_for_profile(sender, instance, **kwargs):
-    """
-    Creates a Photographer record automatically if the role is set.
-    """
-    if instance.role == 'photographer':
-        try:
-            Photographer.objects.get_or_create(user=instance.user)
-        except IntegrityError:
-            pass
+# --- FILE CLEANUP SIGNALS ONLY ---
 
 @receiver(post_delete, sender=Portfolio)
 def delete_portfolio_image_on_delete(sender, instance, **kwargs):

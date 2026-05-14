@@ -2,9 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
-from .models import Profile
-from .models import Photographer
-from .models import Portfolio, Review
+from .models import Profile, Portfolio, Review, Photographer, Booking
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -52,6 +50,33 @@ class PortfolioForm(forms.ModelForm):
     class Meta:
         model = Portfolio
         fields = ['image', 'description']
+
+
+class BookingForm(forms.ModelForm):
+    class Meta:
+        model = Booking
+        fields = ['event_date', 'event_type', 'location', 'message']
+        
+        # Widgets make the HTML look nice and add things like the date-picker calendar
+        widgets = {
+            'event_date': forms.DateInput(attrs={
+                'type': 'date', 
+                'class': 'form-control'
+            }),
+            'event_type': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'e.g., Wedding, Birthday, Corporate Portrait'
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Full address or venue name'
+            }),
+            'message': forms.Textarea(attrs={
+                'class': 'form-control', 
+                'rows': 4, 
+                'placeholder': 'Tell the photographer about your vision, schedule, and any special requests...'
+            }),
+        }
 
 
 class ReviewForm(forms.ModelForm):

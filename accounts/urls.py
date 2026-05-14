@@ -17,4 +17,5 @@ urlpatterns = [
     path('developer/user/<int:user_pk>/delete/', views.developer_delete_user, name='developer_delete_user'),
     path('client/dashboard/', views.client_dashboard, name='client_dashboard'),
     path('booking/<int:booking_pk>/review/', views.add_review, name='add_review'),
+    path('book/<int:photographer_id>/', views.book_photographer, name='book_photographer'),
 ]
