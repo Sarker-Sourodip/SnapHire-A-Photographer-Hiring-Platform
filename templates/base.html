@@ -31,8 +31,7 @@
 
     body {
       font-family: 'DM Sans', sans-serif;
-      /* We set the default background to the warm light color for Dashboards. 
-         We will override this to dark specifically in home.html! */
+      /* Default background is the warm light color for Dashboards */
       background-color: var(--snap-warm); 
       color: var(--snap-ink);
     }
@@ -50,7 +49,7 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    /* CSS Logo based on your Canva Design (Swappable for your image) */
+    /* Custom Logo */
     .nav-logo-link {
       text-decoration: none;
       display: flex;
@@ -82,12 +81,14 @@
       transition: color 0.15s;
       margin: 0 8px;
     }
+    
+    /* Dynamic Active State */
     .snap-navbar .nav-link:hover, 
     .snap-navbar .nav-link.active {
       color: var(--snap-gold-lt) !important;
     }
 
-    /* Global Buttons used in Navbar */
+    /* Global Navbar Buttons */
     .btn-ghost {
       font-size: 13px;
       color: rgba(255,255,255,0.7);
@@ -130,7 +131,7 @@
         <span class="nav-logo-text">SnapHire</span>
       </a>
 
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
       </button>
 
@@ -138,17 +139,17 @@
         
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'home' %}">Home</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
           </li>
 
           {% if user.is_authenticated and user.profile.role == 'client' %}
             <li class="nav-item">
-              <a class="nav-link" style="color: var(--snap-gold-lt) !important;" href="{% url 'photographers_list' %}">Photographers</a>
+              <a class="nav-link {% if request.resolver_match.url_name == 'photographers_list' %}active{% endif %}" href="{% url 'photographers_list' %}">Photographers</a>
             </li>
           {% endif %}
 
-          <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">About</a></li>
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">Contact</a></li>
         </ul>
 
         <ul class="navbar-nav ms-auto align-items-center gap-3">
