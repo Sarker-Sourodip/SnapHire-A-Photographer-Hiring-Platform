@@ -17,7 +17,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='client')
     phone = models.CharField(max_length=15, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', default='default.jpg', blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', default='profile_pictures/default.jpg', blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -82,7 +82,6 @@ class Review(models.Model):
     def __str__(self):
         return f"Review for {self.booking.photographer.user.username}"
 
-# --- FILE CLEANUP SIGNALS ONLY ---
 
 @receiver(post_delete, sender=Portfolio)
 def delete_portfolio_image_on_delete(sender, instance, **kwargs):
@@ -120,3 +119,55 @@ def delete_old_portfolio_image_on_change(sender, instance, **kwargs):
         logger.warning("Failed removing old portfolio image %s: %s", name, e)
     except Exception:
         logger.exception("Unexpected error removing old portfolio image %s", name)
+
+
+@receiver(post_delete, sender=Profile)
+def delete_profile_picture_on_delete(sender, instance, **kwargs):
+    """Deletes the profile picture when the user account is deleted."""
+    if not instance.profile_picture:
+        return
+        
+    # STOP! Never delete the default image!
+    if instance.profile_picture.name == 'profile_pictures/default.jpg':
+        return
+        
+    storage = instance.profile_picture.storage
+    name = instance.profile_picture.name
+    try:
+        if name and storage.exists(name):
+            storage.delete(name)
+    except (FileNotFoundError, OSError) as e:
+        logger.warning("Failed deleting profile picture %s: %s", name, e)
+    except Exception:
+        logger.exception("Unexpected error deleting profile picture %s", name)
+
+
+@receiver(pre_save, sender=Profile)
+def delete_old_profile_picture_on_change(sender, instance, **kwargs):
+    """Deletes the old profile picture when a user uploads a new one."""
+    if not instance.pk:
+        return
+    try:
+        old = Profile.objects.get(pk=instance.pk)
+    except Profile.DoesNotExist:
+        return
+        
+    old_file = old.profile_picture
+    new_file = instance.profile_picture
+    
+    if not old_file or old_file == new_file:
+        return
+
+    # STOP! Never delete the default image!
+    if old_file.name == 'profile_pictures/default.jpg':
+        return
+
+    storage = old_file.storage
+    name = old_file.name
+    try:
+        if name and storage.exists(name):
+            storage.delete(name)
+    except (FileNotFoundError, OSError) as e:
+        logger.warning("Failed removing old profile picture %s: %s", name, e)
+    except Exception:
+        logger.exception("Unexpected error removing old profile picture %s", name)
