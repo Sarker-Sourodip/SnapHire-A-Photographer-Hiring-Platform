@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'projectFile',
     'core',
     'accounts',
+    'features',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'accounts.views.notification_count',
             ],
         },
     },

@@ -9,9 +9,11 @@ from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.db.models import Avg, Count
 from functools import wraps
+from django.contrib import messages
+from .models import Notification
 
 from .forms import RegistrationForm, LoginForm, PhotographerForm, PortfolioForm, ReviewForm, BookingForm, PhotographerUpdateForm, ProfileUpdateForm
-from .models import Photographer, Profile, Portfolio, Booking, Review
+from .models import Photographer, Profile, Portfolio, Booking, Review, Notification
 
 # --- NEW: Import the Service ---
 from .services import create_user_safely
@@ -456,6 +458,66 @@ def update_booking_status(request, booking_id, status):
     if status in ['accepted', 'rejected', 'completed']:
         booking.status = status
         booking.save()
-        messages.success(request, f"Booking has been marked as {status.title()}!")
+
+        # Create notification for client
+
+        if status == 'accepted':
+            Notification.objects.create(
+                user=booking.client,
+                message=f"Your booking with {booking.photographer.user.username} was accepted."
+            )
+
+        elif status == 'rejected':
+            Notification.objects.create(
+                user=booking.client,
+                message=f"Your booking with {booking.photographer.user.username} was rejected."
+            )
+
+        elif status == 'completed':
+            Notification.objects.create(
+                user=booking.client,
+                message=f"Your booking with {booking.photographer.user.username} was completed."
+            )
+
+        if status == 'accepted':
+            messages.success(
+                request,
+                f"You accepted the booking from {booking.client.username}."
+            )
+
+        elif status == 'rejected':
+            messages.warning(
+                request,
+                f"You rejected the booking from {booking.client.username}."
+            )
+
+        elif status == 'completed':
+            messages.success(
+                request,
+                "Booking marked as completed successfully!"
+            )
         
     return redirect('photographer_dashboard')
+
+@login_required
+def notifications(request):
+    notifications = Notification.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
+
+    return render(request, 'accounts/notifications.html', {
+        'notifications': notifications
+    })
+
+
+
+def notification_count(request):
+    if request.user.is_authenticated:
+        count = Notification.objects.filter(
+            user=request.user,
+            is_read=False
+        ).count()
+
+        return {'notification_count': count}
+
+    return {'notification_count': 0}

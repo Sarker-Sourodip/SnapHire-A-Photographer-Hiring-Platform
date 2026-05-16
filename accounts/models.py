@@ -171,3 +171,13 @@ def delete_old_profile_picture_on_change(sender, instance, **kwargs):
         logger.warning("Failed removing old profile picture %s: %s", name, e)
     except Exception:
         logger.exception("Unexpected error removing old profile picture %s", name)
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.message[:30]}"

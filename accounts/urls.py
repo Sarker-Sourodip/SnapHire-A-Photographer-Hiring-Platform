@@ -20,4 +20,5 @@ urlpatterns = [
     path('booking/<int:booking_id>/update/<str:status>/', views.update_booking_status, name='update_booking_status'),
     path('booking/<int:booking_pk>/review/', views.add_review, name='add_review'),
     path('book/<int:photographer_id>/', views.book_photographer, name='book_photographer'),
+    path('notifications/', views.notifications, name='notifications'),
 ]
