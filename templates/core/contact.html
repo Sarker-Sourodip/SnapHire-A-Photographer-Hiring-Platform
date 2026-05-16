@@ -1,0 +1,602 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact — SnapHire BD{% endblock %}
+
+{% block content %}
+<style>
+    /* ================================================
+     CONTACT PAGE — SnapHire BD
+     ================================================ */
+
+    .contact-hero {
+        background: linear-gradient(160deg, var(--snap-dark) 0%, #3d2a0f 60%, #1a1208 100%);
+        padding: 72px 0 52px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .contact-hero::before {
+        content: '';
+        position: absolute;
+        top: -80px;
+        right: -80px;
+        width: 360px;
+        height: 360px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(200, 150, 43, 0.10) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .contact-hero-inner {
+        position: relative;
+        z-index: 2;
+    }
+
+    .contact-eyebrow {
+        display: inline-block;
+        background: rgba(200, 150, 43, 0.15);
+        border: 1px solid rgba(200, 150, 43, 0.3);
+        color: var(--snap-gold);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 5px 16px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+
+    .contact-hero h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(34px, 5.5vw, 52px);
+        color: var(--snap-gold-lt);
+        margin-bottom: 14px;
+        line-height: 1.15;
+    }
+
+    .contact-hero p {
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 16px;
+        max-width: 500px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+
+    /* ---- Page body ---- */
+    .contact-body {
+        padding: 64px 0 80px;
+    }
+
+    /* ---- Section labels (reuse from about) ---- */
+    .section-label {
+        display: inline-block;
+        background: rgba(200, 150, 43, 0.1);
+        border: 1px solid var(--snap-border);
+        color: var(--snap-gold);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 4px 14px;
+        border-radius: 20px;
+        margin-bottom: 12px;
+    }
+
+    .section-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(24px, 3.5vw, 32px);
+        color: var(--snap-text);
+        margin-bottom: 8px;
+        line-height: 1.25;
+    }
+
+    .section-sub {
+        color: var(--snap-muted);
+        font-size: 14px;
+        line-height: 1.7;
+        margin-bottom: 0;
+    }
+
+    /* ================================================
+     TEAM CONTACT CARDS
+     ================================================ */
+    .team-contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+        margin-top: 36px;
+    }
+
+    .tc-card {
+        background: var(--snap-surface);
+        border: 1px solid var(--snap-border);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        position: relative;
+    }
+
+    body.dark-mode .tc-card {
+        background: var(--snap-card-bg);
+    }
+
+    .tc-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 48px rgba(200, 150, 43, 0.10);
+    }
+
+    .tc-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--snap-gold), var(--snap-gold-lt));
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    .tc-card:hover::before {
+        opacity: 1;
+    }
+
+    /* Top section: mini profile */
+    .tc-profile {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 22px 22px 18px;
+        border-bottom: 1px solid var(--snap-border);
+    }
+
+    .tc-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: top center;
+        border: 2px solid var(--snap-border);
+        flex-shrink: 0;
+        background: var(--snap-tag);
+    }
+
+    .tc-avatar-placeholder {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 2px solid var(--snap-border);
+        flex-shrink: 0;
+        background: linear-gradient(135deg, #2b1f0e, #3d2a0f);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .tc-number {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--snap-gold);
+        margin-bottom: 3px;
+    }
+
+    .tc-name {
+        font-family: 'DM Serif Display', serif;
+        font-size: 18px;
+        color: var(--snap-text);
+        line-height: 1.2;
+    }
+
+    /* Contact links list */
+    .tc-links {
+        padding: 18px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tc-link-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--snap-border);
+        background: var(--snap-warm);
+        text-decoration: none;
+        transition: background 0.15s, border-color 0.15s;
+        cursor: pointer;
+    }
+
+    body.dark-mode .tc-link-row {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .tc-link-row:hover {
+        background: rgba(200, 150, 43, 0.08);
+        border-color: rgba(200, 150, 43, 0.3);
+        text-decoration: none;
+    }
+
+    .tc-link-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        flex-shrink: 0;
+    }
+
+    .tc-link-icon.github {
+        background: rgba(30, 30, 30, 0.1);
+    }
+
+    .tc-link-icon.whatsapp {
+        background: rgba(37, 211, 102, 0.12);
+    }
+
+    .tc-link-icon.facebook {
+        background: rgba(24, 119, 242, 0.12);
+    }
+
+    .tc-link-icon.email {
+        background: rgba(200, 150, 43, 0.12);
+    }
+
+    .tc-link-text {
+        flex: 1;
+    }
+
+    .tc-link-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--snap-muted);
+        margin-bottom: 2px;
+    }
+
+    .tc-link-value {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--snap-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
+
+    .tc-link-arrow {
+        color: var(--snap-muted);
+        font-size: 14px;
+        transition: transform 0.15s;
+    }
+
+    .tc-link-row:hover .tc-link-arrow {
+        transform: translateX(3px);
+    }
+
+    /* ---- Placeholder style (FIXED) ---- */
+    .tc-link-row.placeholder {
+        opacity: 0.45;
+        cursor: default;
+        pointer-events: none;
+        /* Safely disables phantom clicks */
+    }
+
+    .tc-link-row.placeholder:hover {
+        background: var(--snap-warm);
+        border-color: var(--snap-border);
+    }
+
+    body.dark-mode .tc-link-row.placeholder:hover {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* ================================================
+     GENERAL CONTACT INFO STRIP
+     ================================================ */
+    .general-contact-strip {
+        background: var(--snap-surface);
+        border: 1px solid var(--snap-border);
+        border-radius: 18px;
+        padding: 36px;
+        margin-top: 48px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+    }
+
+    body.dark-mode .general-contact-strip {
+        background: var(--snap-card-bg);
+    }
+
+    .gc-item {
+        text-align: center;
+    }
+
+    .gc-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .gc-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--snap-muted);
+        margin-bottom: 6px;
+    }
+
+    .gc-value {
+        font-family: 'DM Serif Display', serif;
+        font-size: 16px;
+        color: var(--snap-text);
+    }
+
+    .gc-sub {
+        font-size: 12px;
+        color: var(--snap-muted);
+        margin-top: 2px;
+    }
+
+    /* ---- CTA ---- */
+    .contact-cta {
+        background: linear-gradient(135deg, var(--snap-dark) 0%, #2b1a05 100%);
+        border-radius: 18px;
+        padding: 44px 40px;
+        text-align: center;
+        margin-top: 48px;
+    }
+
+    .contact-cta h3 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 26px;
+        color: var(--snap-gold-lt);
+        margin-bottom: 10px;
+    }
+
+    .contact-cta p {
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 14px;
+        margin-bottom: 22px;
+    }
+
+    .btn-cta-gold {
+        display: inline-block;
+        background: var(--snap-gold);
+        color: var(--snap-dark) !important;
+        padding: 11px 30px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 14px;
+        text-decoration: none;
+        transition: background 0.15s;
+    }
+
+    .btn-cta-gold:hover {
+        background: var(--snap-gold-lt);
+    }
+</style>
+
+<div class="contact-hero">
+    <div class="container">
+        <div class="contact-hero-inner">
+            <span class="contact-eyebrow">Get In Touch</span>
+            <h1>Contact the Team</h1>
+            <p>Reach out to any member of the SnapHire BD team — we'd love to hear from you.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container contact-body">
+
+    <div style="text-align:center; margin-bottom: 8px;">
+        <span class="section-label">Team Contacts</span>
+        <h2 class="section-title">Connect With Our Developers</h2>
+        <p class="section-sub">Find us on GitHub, WhatsApp, Facebook, or email.</p>
+    </div>
+
+    <div class="team-contact-grid">
+
+        <div class="tc-card">
+            <div class="tc-profile">
+                <img class="tc-avatar" src="{% static 'images/team/sourodip.jpeg' %}" alt="Sourodip Sarker"
+                    onerror="this.style.display='none'; document.getElementById('avatar-placeholder-1').style.display='flex';">
+                <div class="tc-avatar-placeholder" id="avatar-placeholder-1" style="display:none;">👨‍💻</div>
+                <div class="tc-name-area">
+                    <div class="tc-number">Member 01</div>
+                    <div class="tc-name">Sourodip Sarker</div>
+                </div>
+            </div>
+            <div class="tc-links">
+
+                <a href="https://github.com/Sarker-Sourodip" class="tc-link-row" target="_blank" rel="noopener">
+                    <div class="tc-link-icon github">🐙</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">GitHub</div>
+                        <div class="tc-link-value">@Sarker-Sourodip</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+                <a href="https://wa.me/8801518992147" class="tc-link-row" target="_blank" rel="noopener">
+                    <div class="tc-link-icon whatsapp">💬</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">WhatsApp</div>
+                        <div class="tc-link-value">+880 1518992147</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+                <a href="https://www.facebook.com/share/18mnhBoFzX/" class="tc-link-row" target="_blank" rel="noopener">
+                    <div class="tc-link-icon facebook">📘</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">Facebook</div>
+                        <div class="tc-link-value">Sourodip Sarker</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sourodipsarker@gmail.com&su=Inquiry from SnapHire BD"
+                    target="_blank" rel="noopener" class="tc-link-row">
+                    <div class="tc-link-icon email">✉️</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">Email</div>
+                        <div class="tc-link-value">sourodipsarker@gmail.com</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="tc-card">
+            <div class="tc-profile">
+                <img class="tc-avatar" src="{% static 'images/team/tawfiq.jpeg' %}" alt="Md. Tawffiquzzaman Uzzal"
+                    onerror="this.style.display='none'; document.getElementById('avatar-placeholder-2').style.display='flex';">
+                <div class="tc-avatar-placeholder" id="avatar-placeholder-2" style="display:none;">👨‍💻</div>
+                <div class="tc-name-area">
+                    <div class="tc-number">Member 02</div>
+                    <div class="tc-name">Md. Tawffiquzzaman Uzzal</div>
+                </div>
+            </div>
+            <div class="tc-links">
+
+                <a href="https://github.com/tawfiquz-zaman" class="tc-link-row" target="_blank" rel="noopener">
+                    <div class="tc-link-icon github">🐙</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">GitHub</div>
+                        <div class="tc-link-value">@tawfiquz-zaman</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+                <a href="https://wa.me/8801620795380" class="tc-link-row" target="_blank" rel="noopener">
+                    <div class="tc-link-icon whatsapp">💬</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">WhatsApp</div>
+                        <div class="tc-link-value">+8801620795380</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+                <a href="https://www.facebook.com/share/1Eah42DZ8i/" class="tc-link-row" target="_blank" rel="noopener">
+                    <div class="tc-link-icon facebook">📘</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">Facebook</div>
+                        <div class="tc-link-value">Tawffiquzzaman Uzzal</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=23201116@uap-bd.edu.com&su=Inquiry from SnapHire BD"
+                    target="_blank" rel="noopener" class="tc-link-row">
+                    <div class="tc-link-icon email">✉️</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">Email</div>
+                        <div class="tc-link-value">23201116@uap-bd.edu</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="tc-card">
+            <div class="tc-profile">
+                <img class="tc-avatar" src="{% static 'images/team/nusrat.jpeg' %}" alt="Nusrat Srabony"
+                    onerror="this.style.display='none'; document.getElementById('avatar-placeholder-3').style.display='flex';">
+                <div class="tc-avatar-placeholder" id="avatar-placeholder-3" style="display:none;">👩‍💻</div>
+                <div class="tc-name-area">
+                    <div class="tc-number">Member 03</div>
+                    <div class="tc-name">Nusrat Srabony</div>
+                </div>
+            </div>
+            <div class="tc-links">
+
+                <a href="https://github.com/nusrat-srabony" class="tc-link-row" target="_blank" rel="noopener">
+                    <div class="tc-link-icon github">🐙</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">GitHub</div>
+                        <div class="tc-link-value">@nusrat-srabony</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+                <a href="https://wa.me/8801833395237" class="tc-link-row" target="_blank" rel="noopener">
+                    <div class="tc-link-icon whatsapp">💬</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">WhatsApp</div>
+                        <div class="tc-link-value">+8801833395237</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+                <a href="https://www.facebook.com/share/184sJ7xC3B/?mibextid=wwXIfr" class="tc-link-row" target="_blank" rel="noopener">
+                    <div class="tc-link-icon facebook">📘</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">Facebook</div>
+                        <div class="tc-link-value">Nusrat Srabony</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=23201124@uap-bd.edu&su=Inquiry from SnapHire BD"
+                    target="_blank" rel="noopener" class="tc-link-row">
+                    <div class="tc-link-icon email">✉️</div>
+                    <div class="tc-link-text">
+                        <div class="tc-link-label">Email</div>
+                        <div class="tc-link-value">23201124@uap-bd.edu</div>
+                    </div>
+                    <span class="tc-link-arrow">→</span>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="general-contact-strip">
+        <div class="gc-item">
+            <span class="gc-icon">🐙</span>
+            <div class="gc-label">Project Repository</div>
+            <div class="gc-value">GitHub</div>
+            <div class="gc-sub">Add repo link later</div>
+        </div>
+        <div class="gc-item">
+            <span class="gc-icon">📍</span>
+            <div class="gc-label">Location</div>
+            <div class="gc-value">Bangladesh</div>
+            <div class="gc-sub">Dhaka, BD</div>
+        </div>
+        <div class="gc-item">
+            <span class="gc-icon">🎓</span>
+            <div class="gc-label">Project Type</div>
+            <div class="gc-value">University Project</div>
+            <div class="gc-sub">Django Web App</div>
+        </div>
+        <div class="gc-item">
+            <span class="gc-icon">⚡</span>
+            <div class="gc-label">Response Time</div>
+            <div class="gc-value">Within 24hrs</div>
+            <div class="gc-sub">On WhatsApp / Email</div>
+        </div>
+    </div>
+
+    <div class="contact-cta">
+        <h3>Want to use SnapHire BD?</h3>
+        <p>Register as a client or photographer and start using the platform today.</p>
+        <a href="{% url 'register' %}" class="btn-cta-gold">Get Started Free</a>
+    </div>
+
+</div>
+{% endblock %}
