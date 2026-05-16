@@ -151,14 +151,22 @@ def photographer_dashboard(request):
 
     photographer, created = Photographer.objects.get_or_create(user=request.user)
     portfolios = Portfolio.objects.filter(photographer=photographer)
-    
-    # NEW: Get all bookings for this photographer, newest first
     bookings = Booking.objects.filter(photographer=photographer).order_by('-created_at')
+
+    # 1. Fetch the reviews (using the fix from the last step)
+    reviews = Review.objects.filter(booking__photographer=photographer).order_by('-created_at')
+
+    # 2. Calculate the Average Rating dynamically
+    # We look at all 'rating' fields in the reviews and get the average
+    stats = reviews.aggregate(Avg('rating'))
+    calculated_rating = stats['rating__avg'] or 0.0
 
     return render(request, 'accounts/photographer_dashboard.html', {
         'photographer': photographer,
         'portfolios': portfolios,
-        'bookings': bookings, # Pass bookings to the HTML
+        'bookings': bookings,
+        'reviews': reviews,
+        'avg_rating': calculated_rating, # Pass the NEW calculated rating
     })
 
 
