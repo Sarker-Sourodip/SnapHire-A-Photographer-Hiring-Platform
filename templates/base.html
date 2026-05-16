@@ -7,63 +7,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>{% block title %}SnapHire{% endblock %}</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <style>
-    body {
-      background-color: #f5f7fa;
-      font-family: Arial, sans-serif;
-    }
-
-    .navbar {
-      padding: 12px 0;
-    }
-
-    .navbar-brand img {
-      height: 60px;
-      width: auto;
-    }
-
-    .nav-link {
-      font-weight: 500;
-    }
-
-    .notification-badge {
-      background: red;
-      color: white;
-      border-radius: 50%;
-      padding: 2px 7px;
-      font-size: 12px;
-      margin-left: 5px;
-    }
-
-    .messages {
-      width: 90%;
-      margin: 20px auto;
-    }
-
-    .alert {
-      border-radius: 10px;
-    }
-  </style>
+  <title>{% block title %}Home{% endblock %}</title>
 </head>
 
 <body>
-
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
 
       <a class="navbar-brand" href="{% url 'home' %}">
-        <img src="{% static 'images/logo.jpeg' %}" alt="SnapHire">
+        <img src="{% static 'images/logo.jpeg'%}" alt="📸 SnapHire">
       </a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-        data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
 
@@ -74,14 +27,15 @@
           </li>
 
           {% if user.is_authenticated %}
-            {% if user.profile.role == 'client' %}
-            <li class="nav-item">
-              <a class="nav-link text-info fw-bold"
-                href="{% url 'photographers_list' %}">
-                Photographers
-              </a>
-            </li>
-            {% endif %}
+
+          {% if user.profile.role == 'client' %}
+          <li class="nav-item">
+            <a class="nav-link fw-bold text-primary" href="{% url 'photographers_list' %}">
+              Photographers
+            </a>
+          </li>
+          {% endif %}
+
           {% endif %}
 
           <li class="nav-item">
@@ -94,57 +48,38 @@
 
         </ul>
 
-        <ul class="navbar-nav align-items-center">
+        <ul class="navbar-nav">
 
           {% if user.is_authenticated %}
 
           <li class="nav-item">
-            <span class="nav-link text-light">
-              Hello, {{ user.username }}
-            </span>
+            <a class="nav-link">Hello, {{ user.username }}</a>
           </li>
 
-          <!-- Notifications -->
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'notifications' %}">
-              🔔 Notifications
-
-              {% if notification_count > 0 %}
-              <span class="notification-badge">
-                {{ notification_count }}
-              </span>
-              {% endif %}
-            </a>
-          </li>
-
-          <!-- Dashboard -->
           <li class="nav-item">
             {% if request.session.role == 'photographer' %}
-              <a class="nav-link" href="{% url 'photographer_dashboard' %}">
-                Dashboard
-              </a>
+            <a class="nav-link" href="{% url 'photographer_dashboard' %}">Dashboard</a>
 
             {% elif request.session.role == 'client' %}
-              <a class="nav-link" href="{% url 'client_dashboard' %}">
-                Dashboard
-              </a>
+            <a class="nav-link" href="{% url 'client_dashboard' %}">Dashboard</a>
 
             {% elif request.session.role == 'developer' %}
-              <a class="nav-link" href="{% url 'developer_dashboard' %}">
-                Dashboard
-              </a>
+            <a class="nav-link" href="{% url 'developer_dashboard' %}">Dashboard</a>
 
             {% else %}
-              <a class="nav-link" href="{% url 'home' %}">
-                Dashboard
-              </a>
+            <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
             {% endif %}
           </li>
 
-          <!-- Logout -->
+          <!-- Notification Bell -->
           <li class="nav-item">
-            <a class="nav-link text-danger"
-              href="{% url 'logout' %}">
+            <a class="nav-link" href="{% url 'notifications' %}">
+              🔔 Notifications ({{ notification_count }})
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-danger" href="{% url 'logout' %}">
               Logout
             </a>
           </li>
@@ -152,14 +87,11 @@
           {% else %}
 
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">
-              Login
-            </a>
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
           </li>
 
           <li class="nav-item">
-            <a class="btn btn-primary ms-2"
-              href="{% url 'register' %}">
+            <a class="btn btn-primary ms-2" href="{% url 'register' %}">
               Register
             </a>
           </li>
@@ -172,21 +104,8 @@
     </div>
   </nav>
 
-  <!-- Django Messages -->
-  <div class="messages">
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-success">
-          {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
-  </div>
-
   {% block content %}
   {% endblock %}
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
