@@ -42,7 +42,10 @@ INSTALLED_APPS = [
     'core',
     'accounts',
     'features',
+<<<<<<< HEAD
 
+=======
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
 ]
 
 MIDDLEWARE = [
@@ -67,6 +70,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+<<<<<<< HEAD
+=======
+                'accounts.views.notification_count',
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
             ],
         },
     },
@@ -110,7 +117,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+<<<<<<< HEAD
 TIME_ZONE = 'Asia/Dhaka'
+=======
+TIME_ZONE = 'UTC'
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
 
 USE_I18N = True
 

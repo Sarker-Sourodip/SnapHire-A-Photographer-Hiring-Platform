@@ -5,6 +5,7 @@
 
 {% block content %}
 <style>
+<<<<<<< HEAD
     .auth-wrapper { 
         min-height: 80vh; 
         display: flex; 
@@ -94,6 +95,82 @@
     
     .btn-submit:hover { 
         background: var(--snap-gold-lt); 
+=======
+    .auth-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+    
+    .auth-card {
+        background: var(--snap-surface);
+        border: 1px solid var(--snap-border);
+        border-radius: 14px;
+        padding: 40px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .auth-title {
+        font-size: 2rem;
+        color: var(--snap-ink);
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--snap-muted);
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    /* Target Django's default input fields */
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+        width: 100%;
+        border: 1px solid var(--snap-border);
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 14px;
+        color: var(--snap-ink);
+        font-family: 'DM Sans', sans-serif;
+        transition: outline 0.2s;
+    }
+
+    .form-group input:focus, 
+    .form-group select:focus {
+        outline: 2px solid var(--snap-gold);
+        outline-offset: -1px;
+    }
+
+    .btn-submit {
+        background: var(--snap-gold);
+        color: var(--snap-ink) !important;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 14px 24px;
+        border-radius: 8px;
+        border: none;
+        width: 100%;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+        background: var(--snap-gold-lt);
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
     }
 </style>
 
@@ -101,16 +178,36 @@
     <div class="auth-card">
         <h2 class="auth-title font-serif">Create Account</h2>
 
+<<<<<<< HEAD
         <form method="POST" enctype="multipart/form-data" id="registration-form">
             {% csrf_token %}
             
             {% if form.errors %}
                 <div class="alert alert-danger" style="background: #FEF0EF; color: var(--snap-red); border-radius: 8px; padding: 15px; font-size: 13px; margin-bottom: 20px;">
                     <strong>Please fix the errors below.</strong>
+=======
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="alert alert-danger" style="background: #FEF0EF; border: 1px solid var(--snap-red); color: var(--snap-red); border-radius: 8px; padding: 15px; font-size: 13px; margin-bottom: 20px;">
+                    <strong>Please correct the following errors:</strong>
+                    <ul class="mb-0 mt-2 pl-3">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
                 </div>
             {% endif %}
 
             {% for field in form %}
+<<<<<<< HEAD
                 {% if field.name != 'location' and field.name != 'bio' and field.name != 'experience_years' and field.name != 'price_per_hour' %}
                     <div class="form-group">
                         <label class="form-label">{{ field.label }}</label>
@@ -137,6 +234,24 @@
                     {% endif %}
                 {% endfor %}
             </div>
+=======
+                <div class="form-group">
+                    <label class="form-label">{{ field.label }}</label>
+                    
+                    {% if field.name == 'profile_picture' %}
+                        <div class="text-center mb-3">
+                            <img id="register-image-preview" src="#" alt="Preview" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; display: none; border: 3px solid var(--snap-surface); box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        </div>
+                    {% endif %}
+                    
+                    {{ field }}
+                    
+                    {% if field.help_text %}
+                        <small style="color: var(--snap-muted); font-size: 11px; margin-top: 4px; display: block;">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
 
             <button type="submit" class="btn-submit">Register →</button>
             
@@ -149,6 +264,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+<<<<<<< HEAD
         const roleSelect = document.querySelector('select[name="role"]');
         const photoSection = document.getElementById('photographer-fields');
 
@@ -178,6 +294,8 @@
         }
 
         // --- 3. IMAGE PREVIEW LOGIC ---
+=======
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
         const imageInput = document.querySelector('input[type="file"][name="profile_picture"]');
         const imagePreview = document.getElementById('register-image-preview');
 
@@ -187,6 +305,12 @@
                 if (file) {
                     imagePreview.src = URL.createObjectURL(file);
                     imagePreview.style.display = 'inline-block';
+<<<<<<< HEAD
+=======
+                } else {
+                    imagePreview.style.display = 'none';
+                    imagePreview.src = '#';
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
                 }
             });
         }

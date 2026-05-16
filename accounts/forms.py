@@ -6,7 +6,11 @@ from .models import Profile, Portfolio, Review, Photographer, Booking
 
 class RegistrationForm(forms.ModelForm): # Assuming you are using ModelForm for User
     password1 = forms.CharField(label = "Password",widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+<<<<<<< HEAD
     password_confirm = forms.CharField(label = "Confirm Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+=======
+    password_confirm = forms.CharField(label = "Conform Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
     role = forms.ChoiceField(choices=Profile.ROLE_CHOICES, widget=forms.Select(attrs={'class': 'form-select', 'id': 'role-select'}))
 
     # --- Profile Fields ---
@@ -95,6 +99,7 @@ class PhotographerUpdateForm(forms.ModelForm):
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
+<<<<<<< HEAD
         # CHANGED: 'message' is now 'notes' to match the updated models.py
         fields = ['event_date', 'event_type', 'location', 'notes']
         
@@ -103,6 +108,14 @@ class BookingForm(forms.ModelForm):
             # CHANGED: Now uses DateTimeInput and 'datetime-local' to capture the exact hour/minute
             'event_date': forms.DateTimeInput(attrs={
                 'type': 'datetime-local', 
+=======
+        fields = ['event_date', 'event_type', 'location', 'message']
+        
+        # Widgets make the HTML look nice and add things like the date-picker calendar
+        widgets = {
+            'event_date': forms.DateInput(attrs={
+                'type': 'date', 
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
                 'class': 'form-control'
             }),
             'event_type': forms.TextInput(attrs={
@@ -113,8 +126,12 @@ class BookingForm(forms.ModelForm):
                 'class': 'form-control', 
                 'placeholder': 'Full address or venue name'
             }),
+<<<<<<< HEAD
             # CHANGED: Key is now 'notes' instead of 'message'
             'notes': forms.Textarea(attrs={
+=======
+            'message': forms.Textarea(attrs={
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
                 'class': 'form-control', 
                 'rows': 4, 
                 'placeholder': 'Tell the photographer about your vision, schedule, and any special requests...'

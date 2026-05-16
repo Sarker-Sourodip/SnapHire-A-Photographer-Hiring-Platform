@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 # Create your models here.
@@ -10,3 +11,8 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+=======
+from django.db import models
+
+# Create your models here.
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09

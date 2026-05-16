@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 URL configuration for projectFile project.
 
@@ -41,3 +42,15 @@ handler403 = custom_403_view
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+=======
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    path('', include('core.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('features/', include('features.urls')),
+]
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09

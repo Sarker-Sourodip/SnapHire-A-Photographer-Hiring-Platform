@@ -49,6 +49,7 @@ class Booking(models.Model):
         ('completed', 'Completed'),
     )
 
+<<<<<<< HEAD
     # Relationships
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_bookings')
     photographer = models.ForeignKey(Photographer, on_delete=models.CASCADE, related_name='photographer_bookings')
@@ -63,12 +64,36 @@ class Booking(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     
     # Timestamps
+=======
+    PAYMENT_CHOICES = (
+        ('unpaid', 'Unpaid'),
+        ('partial', 'Partial Deposit'),
+        ('paid', 'Fully Paid'),
+        ('refunded', 'Refunded'),
+    )
+
+    client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_bookings')
+    photographer = models.ForeignKey(Photographer, on_delete=models.CASCADE, related_name='photographer_bookings')
+    
+    event_date = models.DateField()
+    event_type = models.CharField(max_length=100)
+    location = models.CharField(max_length=200)
+    message = models.TextField(blank=True, null=True)
+    
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='unpaid')
+    
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+<<<<<<< HEAD
         # Now shows the date in the admin panel (e.g., "ClientName → PhotoName (Oct 12, 2026)")
         return f"{self.client.username} → {self.photographer.user.username} ({self.event_date.strftime('%b %d, %Y')})"
+=======
+        return f"{self.client.username} → {self.photographer.user.username}"
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
 
 class Review(models.Model):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE)
@@ -167,4 +192,18 @@ def delete_old_profile_picture_on_change(sender, instance, **kwargs):
     except (FileNotFoundError, OSError) as e:
         logger.warning("Failed removing old profile picture %s: %s", name, e)
     except Exception:
+<<<<<<< HEAD
         logger.exception("Unexpected error removing old profile picture %s", name)
+=======
+        logger.exception("Unexpected error removing old profile picture %s", name)
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.message[:30]}"
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09

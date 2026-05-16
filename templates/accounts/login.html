@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+<<<<<<< HEAD
 {% load static %}
 
 {% block title %}Login - SnapHire{% endblock %}
@@ -141,4 +142,39 @@
         </form>
     </div>
 </div>
+=======
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<h1>Login</h1>
+
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <p>
+        {{ form.username.label_tag }}<br>
+        {{ form.username }}
+        {{ form.username.errors }}
+    </p>
+
+    <p>
+        {{ form.password.label_tag }}<br>
+        {{ form.password }}
+        {{ form.password.errors }}
+    </p>
+
+    <button type="submit">Login</button>
+</form>
+{% if messages %}
+    {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+<<<<<<< HEAD
 {% load static %}
 
 {% block title %}Confirm Delete - SnapHire{% endblock %}
@@ -94,4 +95,19 @@
         </form>
     </div>
 </div>
+=======
+
+{% block title %}
+Confirm Delete
+{% endblock %}
+
+{% block content %}
+<h1>Confirm Delete</h1>
+<p>Are you sure you want to delete this item?</p>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="javascript:history.back()">Cancel</a>
+</form>
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
 {% endblock %}

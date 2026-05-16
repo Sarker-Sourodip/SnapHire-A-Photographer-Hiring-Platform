@@ -20,4 +20,8 @@ urlpatterns = [
     path('booking/<int:booking_id>/update/<str:status>/', views.update_booking_status, name='update_booking_status'),
     path('booking/<int:booking_pk>/review/', views.add_review, name='add_review'),
     path('book/<int:photographer_id>/', views.book_photographer, name='book_photographer'),
+<<<<<<< HEAD
+=======
+    path('notifications/', views.notifications, name='notifications'),
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
 ]

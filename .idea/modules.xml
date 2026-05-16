@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/Final version.iml" filepath="$PROJECT_DIR$/.idea/Final version.iml" />
+=======
+<<<<<<< HEAD
+      <module fileurl="file://$PROJECT_DIR$/.idea/SnapHire.iml" filepath="$PROJECT_DIR$/.idea/SnapHire.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/SnapHire-A-Photographer-Hiring-Platform.iml" filepath="$PROJECT_DIR$/.idea/SnapHire-A-Photographer-Hiring-Platform.iml" />
+>>>>>>> db80efc18f8ef14d3364547c90e08461e241ec43
+>>>>>>> fa2185a29b4a06bc566f661b75273322ac13dc09
     </modules>
   </component>
 </project>
