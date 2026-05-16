@@ -20,6 +20,152 @@
     
     .photographer-card { background: white; border: 1px solid var(--snap-border); border-radius: 14px; transition: transform 0.2s; }
     .photographer-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(200, 150, 43, 0.08); }
+{% block title %}Browse Photographers - SnapHire{% endblock %}
+
+{% block content %}
+<style>
+  /* --- BROWSE PAGE SPECIFIC STYLES --- */
+  
+  /* Page Header Badge */
+  .page-badge {
+    display: inline-block;
+    background: rgba(200, 150, 43, 0.12);
+    border: 1px solid rgba(200, 150, 43, 0.25);
+    color: var(--snap-gold);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+    color: var(--snap-ink);
+    margin-bottom: 8px;
+  }
+
+  .section-sub {
+    font-size: 15px;
+    color: var(--snap-muted);
+    margin-bottom: 40px;
+  }
+
+  /* Photographer Card */
+  .photo-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+
+  .photo-card {
+    background: var(--snap-surface);
+    border: 1px solid var(--snap-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .photo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  }
+
+  /* Top Banner/Photo Area */
+  .card-photo {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .card-avail {
+    position: absolute;
+    top: 12px; 
+    right: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: #E8F5EF; 
+    color: var(--snap-green);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Card Details Area */
+  .card-body-custom { 
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--snap-ink);
+    margin-bottom: 4px;
+  }
+
+  .card-loc {
+    font-size: 13px;
+    color: var(--snap-muted);
+    margin-bottom: 12px;
+  }
+
+  /* Tags */
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .tag {
+    font-size: 11px;
+    background: var(--snap-tag);
+    color: var(--snap-muted);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* Card Footer (Price & Rating) */
+  .card-footer-custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto; /* Pushes footer to the bottom */
+    padding-top: 15px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .card-rate {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--snap-ink);
+  }
+
+  .card-rate span { 
+    font-size: 12px; 
+    font-weight: 400; 
+    color: var(--snap-muted); 
+  }
+
+  .card-stars {
+    font-size: 13px;
+    color: var(--snap-gold);
+    font-weight: 600;
+  }
 </style>
 
 <div class="container py-5">
@@ -49,6 +195,10 @@
                 </div>
             </div>
         </form>
+    <div class="mb-4">
+        <span class="page-badge">BROWSE PAGE</span>
+        <h2 class="section-title font-serif">Find Your Photographer</h2>
+        <p class="section-sub">Sorted by rating and portfolio size. Click on a profile to view their work and book a session.</p>
     </div>
 
     <div class="row g-4">
@@ -84,8 +234,57 @@
         {% empty %}
             <div class="col-12 text-center py-5">
                 <h3 class="font-serif text-muted">No photographers found</h3>
+            
+            <div class="col-md-6 col-lg-4">
+                <a href="{% url 'photographer_public' p.id %}" class="photo-card-link">
+                    <div class="photo-card">
+                        
+                        {% if p.user.profile.profile_picture %}
+                            <div class="card-photo" style="background-image: url('{{ p.user.profile.profile_picture.url }}');">
+                                <div class="card-avail">Available</div>
+                            </div>
+                        {% else %}
+                            <div class="card-photo" style="background-image: url('/media/profile_pictures/default.jpg');">
+                                <div class="card-avail">Available</div>
+                            </div>
+                        {% endif %}
+
+                        <div class="card-body-custom">
+                            <div class="card-name">{{ p.user.username }}</div>
+                            <div class="card-loc">
+                                📍 {{ p.location|default:"Location not specified" }}
+                            </div>
+                            
+                            <div class="card-tags">
+                                <span class="tag">Photography</span>
+                                <span class="tag">{{ p.experience_years }} Yrs Exp.</span>
+                            </div>
+                            
+                            <div class="card-footer-custom">
+                                <div class="card-rate">৳{{ p.price_per_hour }} <span>/ hr</span></div>
+                                
+                                <div class="card-stars">
+                                    {% if p.avg_rating %}
+                                        ★★★★★ {{ p.avg_rating|floatformat:1 }}
+                                    {% else %}
+                                        <span class="text-muted" style="font-weight: 400; font-size: 11px;">New</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        {% empty %}
+            <div class="col-12 text-center py-5 mt-4 rounded border" style="background-color: var(--snap-surface); border-color: var(--snap-border) !important;">
+                <div style="font-size: 3rem; margin-bottom: 15px;">📷</div>
+                <h3 class="font-serif text-dark">No photographers found</h3>
+                <p class="text-muted">There are no photographers registered on the platform yet. Check back soon!</p>
             </div>
         {% endfor %}
     </div>
+
 </div>
 {% endblock %}
