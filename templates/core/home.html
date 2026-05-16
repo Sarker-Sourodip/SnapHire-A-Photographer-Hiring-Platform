@@ -1,9 +1,223 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}
-Home
-{% endblock %}
+{% block title %}SnapHire - Bangladesh's Photographer Marketplace{% endblock %}
 
 {% block content %}
-<h1>Home Page</h1>
+<style>
+  /* --- HOME PAGE SPECIFIC STYLES --- */
+  
+  /* Full-height dark wrapper to match the Hero design */
+  .hero-wrapper {
+    background-color: var(--snap-dark);
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    padding: 60px 0;
+  }
+  
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--snap-gold);
+    margin-bottom: 16px;
+  }
+  
+  .hero-heading {
+    font-size: 4.2rem;
+    line-height: 1.1;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+  
+  .hero-heading em {
+    color: var(--snap-gold-lt);
+    font-style: italic;
+  }
+  
+  .hero-sub {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 460px;
+    line-height: 1.7;
+    margin-bottom: 35px;
+  }
+
+  /* --- STATS SECTION --- */
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--snap-gold-lt);
+    display: block;
+    line-height: 1;
+  }
+  
+  .stat-lbl {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* --- HERO VISUAL GRID (Right Side) --- */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 420px;
+    margin-left: auto;
+  }
+  
+  .hero-thumb {
+    border-radius: 12px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    position: relative;
+    background: var(--snap-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+  }
+
+  .hero-thumb:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Large wedding card spans both columns */
+  .hero-thumb.large {
+    grid-column: 1 / -1;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #3d2b10, #6b4a22);
+    font-size: 60px;
+  }
+  
+  .hero-thumb.portrait { background: linear-gradient(135deg, #1a2f3e, #2d5268); font-size: 40px; }
+  .hero-thumb.corporate { background: linear-gradient(135deg, #1e3a28, #2e5c3c); font-size: 40px; }
+
+  .thumb-label {
+    position: absolute;
+    bottom: 10px; left: 10px;
+    font-size: 11px;
+    color: #fff;
+    font-weight: 500;
+    background: rgba(0,0,0,0.5);
+    padding: 4px 10px;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+  }
+
+  .thumb-rating {
+    position: absolute;
+    top: 10px; right: 10px;
+    font-size: 11px;
+    color: var(--snap-gold-lt);
+    background: rgba(0,0,0,0.5);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  /* Responsive Fixes */
+  @media (max-width: 991px) {
+    .hero-heading { font-size: 3.2rem; }
+    .hero-wrapper { text-align: center; }
+    .hero-sub { margin-left: auto; margin-right: auto; }
+    .hero-stats { justify-content: center; }
+    .hero-btns { justify-content: center; }
+  }
+</style>
+
+<div class="container-fluid hero-wrapper">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      
+      <div class="col-lg-6">
+        <div class="hero-eyebrow">Bangladesh's Photographer Marketplace</div>
+        
+        <h1 class="hero-heading font-serif">
+          Book a<br>
+          <em>talented</em><br>
+          photographer<br>
+          instantly.
+        </h1>
+        
+        <p class="hero-sub">
+          SnapHire connects clients with professional photographers — for weddings, portraits, corporate events, and everything in between.
+        </p>
+        
+        <div class="d-flex flex-wrap gap-3 hero-btns">
+          
+          {% if not user.is_authenticated %}
+            <a href="{% url 'login' %}" class="btn-gold px-4 py-3">Find a Photographer</a>
+          
+          {% elif user.profile.role == 'client' %}
+            <a href="{% url 'photographers_list' %}" class="btn-gold px-4 py-3">Find a Photographer</a>
+          
+          {% elif user.profile.role == 'photographer' %}
+            <a href="{% url 'photographer_dashboard' %}" class="btn-gold px-4 py-3">Go to Dashboard</a>
+          
+          {% elif user.profile.role == 'developer' %}
+            <a href="{% url 'developer_dashboard' %}" class="btn-gold px-4 py-3">Admin Panel</a>
+          {% endif %}
+
+          <a href="{% url 'register' %}" class="btn-ghost px-4 py-3 d-flex align-items-center gap-2">
+             Join as Photographer
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num">120+</span>
+            <span class="stat-lbl">Photographers</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">850+</span>
+            <span class="stat-lbl">Events Covered</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">4.8★</span>
+            <span class="stat-lbl">Avg Rating</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 d-none d-lg-block">
+        <div class="hero-grid">
+          
+          <div class="hero-thumb large">
+            📸
+            <div class="thumb-label">Wedding Photography</div>
+            <div class="thumb-rating">★ 4.9</div>
+          </div>
+          
+          <div class="hero-thumb portrait">
+            🎭
+            <div class="thumb-label">Portrait</div>
+          </div>
+          
+          <div class="hero-thumb corporate">
+            🏢
+            <div class="thumb-label">Corporate</div>
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 {% endblock %}

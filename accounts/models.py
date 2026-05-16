@@ -49,29 +49,26 @@ class Booking(models.Model):
         ('completed', 'Completed'),
     )
 
-    PAYMENT_CHOICES = (
-        ('unpaid', 'Unpaid'),
-        ('partial', 'Partial Deposit'),
-        ('paid', 'Fully Paid'),
-        ('refunded', 'Refunded'),
-    )
-
+    # Relationships
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_bookings')
     photographer = models.ForeignKey(Photographer, on_delete=models.CASCADE, related_name='photographer_bookings')
     
-    event_date = models.DateField()
+    # Core Booking Details
+    event_date = models.DateTimeField() # Upgraded to track exact time!
     event_type = models.CharField(max_length=100)
     location = models.CharField(max_length=200)
-    message = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True) # Renamed to match forms.py
     
+    # State Tracking
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    payment_status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='unpaid')
     
+    # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.client.username} → {self.photographer.user.username}"
+        # Now shows the date in the admin panel (e.g., "ClientName → PhotoName (Oct 12, 2026)")
+        return f"{self.client.username} → {self.photographer.user.username} ({self.event_date.strftime('%b %d, %Y')})"
 
 class Review(models.Model):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE)
