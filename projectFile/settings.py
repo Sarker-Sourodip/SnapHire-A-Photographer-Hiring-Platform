@@ -108,11 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-<<<<<<< HEAD
-TIME_ZONE = 'Asia/Dhaka'
-=======
 TIME_ZONE = 'UTC'
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 
 USE_I18N = True
 

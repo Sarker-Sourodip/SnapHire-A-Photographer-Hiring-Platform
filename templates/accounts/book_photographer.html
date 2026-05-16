@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends 'base.html' %}
 {% load static %}
 
@@ -6,174 +5,162 @@
 
 {% block content %}
 <style>
-    :root {
-        --snap-gold: #C8962B;
-        --snap-ink: #1A1A1A;
-        --snap-muted: #555555;
-        --snap-surface: #FDFBF7;
-        --snap-border: rgba(200, 150, 43, 0.2);
-    }
+  /* --- CENTERED LAYOUT WRAPPER --- */
+  .page-wrapper {
+    min-height: 85vh; /* Takes up most of the screen height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
 
-    body { background-color: #F8F6F2; color: var(--snap-ink); }
-    .font-serif { font-family: 'DM Serif Display', serif; }
+  .page-badge {
+    display: inline-block;
+    background: rgba(200, 150, 43, 0.12);
+    border: 1px solid rgba(200, 150, 43, 0.25);
+    color: var(--snap-gold);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
 
-    .booking-card {
-        background: white;
-        border: 1px solid var(--snap-border);
-        border-radius: 16px;
-        box-shadow: 0 10px 40px rgba(200, 150, 43, 0.05);
-        padding: 40px;
-        max-width: 600px;
-        margin: 40px auto;
-    }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+    color: var(--snap-ink);
+    margin-bottom: 8px;
+  }
 
-    .form-group label {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--snap-gold);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 8px;
-        display: block;
-    }
+  .section-sub {
+    font-size: 14px;
+    color: var(--snap-muted);
+    margin-bottom: 32px;
+  }
 
-    .btn-submit {
-        background: var(--snap-ink);
-        color: white;
-        font-weight: 800;
-        letter-spacing: 1px;
-        padding: 16px;
-        border-radius: 8px;
-        width: 100%;
-        border: none;
-        margin-top: 20px;
-        transition: background 0.2s;
-    }
+  /* Centered Booking Card */
+  .booking-card {
+    background: var(--snap-surface);
+    border: 1px solid var(--snap-border);
+    border-radius: 14px;
+    padding: 32px;
+    width: 100%;
+    max-width: 550px; /* Limits width to keep it from stretching too much */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+  }
 
-    .btn-submit:hover { background: var(--snap-gold); }
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--snap-muted);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* Form Inputs */
+  .form-group input, 
+  .form-group select, 
+  .form-group textarea {
+    width: 100%;
+    border: 1px solid var(--snap-border);
+    background: var(--snap-warm);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--snap-ink);
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .form-group input:focus, 
+  .form-group select:focus, 
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--snap-gold);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(200, 150, 43, 0.1);
+  }
+
+  /* Gold Button */
+  .btn-send-request {
+    background-color: var(--snap-gold);
+    color: var(--snap-ink) !important;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .btn-send-request:hover {
+    background-color: var(--snap-gold-lt);
+  }
+
+  .btn-send-request:active {
+    transform: scale(0.98);
+  }
 </style>
 
-<div class="container">
+<div class="page-wrapper">
+    
+    <div class="text-center mb-2">
+        <span class="page-badge">BOOKING FORM</span>
+        <h1 class="section-title">Book a Session</h1>
+        <p class="section-sub">Request a booking with <strong>{{ photographer.user.username }}</strong>.</p>
+    </div>
+
     <div class="booking-card">
-        <div class="text-center mb-4">
-            <h1 class="font-serif">Request a Booking</h1>
-            <p class="text-muted">You are requesting to hire <strong>{{ photographer.user.username }}</strong> at ৳{{ photographer.price_per_hour }}/hr.</p>
-        </div>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} shadow-sm fw-bold">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-
         <form method="POST">
             {% csrf_token %}
             
-            <div class="form-group mb-4">
-                {{ form.event_date.label_tag }}
-                {{ form.event_date }}
-                <small class="text-muted" style="font-size: 11px;">Select the exact date and time for your event.</small>
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <div class="form-group mb-0">
+                        <label class="form-label">Event Type</label>
+                        {{ form.event_type }}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group mb-0">
+                        <label class="form-label">Event Date</label>
+                        {{ form.event_date }}
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group mb-4">
-                {{ form.event_type.label_tag }}
-                {{ form.event_type }}
-            </div>
-
-            <div class="form-group mb-4">
-                {{ form.location.label_tag }}
+            <div class="form-group">
+                <label class="form-label">Location</label>
                 {{ form.location }}
             </div>
 
-            <div class="form-group mb-4">
-                <label for="{{ form.notes.id_for_label }}">Special Notes & Vision</label>
-                {{ form.notes }}
+            <div class="form-group">
+                <label class="form-label">Message to Photographer (optional)</label>
+                {{ form.message }}
             </div>
 
-            <button type="submit" class="btn-submit">SEND BOOKING REQUEST</button>
-            <div class="text-center mt-3">
-                <a href="{% url 'photographer_public' photographer.id %}" class="text-muted fw-bold text-decoration-none" style="font-size: 13px;">← Cancel & Return</a>
-            </div>
+            <button type="submit" class="btn-send-request">
+                Send Booking Request →
+            </button>
         </form>
     </div>
-</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const bookingDateInput = document.querySelector('input[type="datetime-local"]');
-        if (bookingDateInput) {
-            const currentSystemTime = new Date();
-            const year = currentSystemTime.getFullYear();
-            const month = String(currentSystemTime.getMonth() + 1).padStart(2, '0');
-            const day = String(currentSystemTime.getDate()).padStart(2, '0');
-            const hours = String(currentSystemTime.getHours()).padStart(2, '0');
-            const minutes = String(currentSystemTime.getMinutes()).padStart(2, '0');
-            
-            // Locks the calendar picker to the exact current minute
-            bookingDateInput.min = `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
-    });
-</script>
-=======
-<!-- book_photographer.html -->
-{% extends 'base.html' %} <!-- Assuming you have a base template -->
-
-{% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">Hire {{ photographer.user.username }}</h3>
-                </div>
-                <div class="card-body">
-                    
-                    <!-- Display Photographer details (Optional but nice for UX) -->
-                    <div class="mb-4 p-3 bg-light rounded">
-                        <p><strong>Hourly Rate:</strong> ${{ photographer.price_per_hour }}/hr</p>
-                        <p><strong>Location:</strong> {{ photographer.location }}</p>
-                    </div>
-
-                    <!-- THE FORM -->
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        
-                        <br>
-                        <br>
-                        <!-- Render the form fields based on our widgets in forms.py -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Event Date</label>
-                            {{ form.event_date }}
-                        </div>
-                        <br>
-                        <br>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Type of Event</label>
-                            {{ form.event_type }}
-                        </div>
-                        <br>
-                        <br>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Location</label>
-                            {{ form.location }}
-                        </div>
-                        <br>
-                        <br>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Message / Details</label>
-                            {{ form.message }}
-                        </div>
-                        <br>
-                        <br>
-                        <button type="submit" class="btn btn-success w-100 mt-3">
-                            Send Booking Request
-                        </button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
+    <div class="mt-4 text-center">
+        <a href="{% url 'photographer_public' photographer.id %}" class="text-decoration-none" style="color: var(--snap-muted); font-size: 13px; font-weight: 500;">
+            ← Return to Profile
+        </a>
     </div>
+
 </div>
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 {% endblock %}

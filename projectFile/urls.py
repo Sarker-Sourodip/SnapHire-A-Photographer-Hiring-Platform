@@ -19,12 +19,9 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.decorators.cache import never_cache
-<<<<<<< HEAD
-=======
 
 # --- NEW: Import your custom 403 view ---
 # If you put the view in accounts/views.py, change 'core' to 'accounts'
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 from accounts.views import custom_403_view 
 # ----------------------------------------
 
@@ -32,11 +29,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('accounts/', include('accounts.urls')),
-<<<<<<< HEAD
-]
-
-handler403 = custom_403_view
-=======
     
     # If your login/register paths are in a separate accounts app, 
     # you might also need this line if you haven't added it yet:
@@ -46,7 +38,6 @@ handler403 = custom_403_view
 # --- NEW: Register the 403 handler ---
 handler403 = custom_403_view
 # -------------------------------------
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

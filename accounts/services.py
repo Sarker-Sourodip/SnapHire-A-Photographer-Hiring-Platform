@@ -2,47 +2,10 @@ from django.db import transaction
 from django.contrib.auth.models import User
 from .models import Profile, Photographer
 
-<<<<<<< HEAD
-"""
-Creates a new user account, their associated Profile, and optionally their Photographer setup safely using a database transaction.
-
-
-    username (str): The desired username for the new account.
-    password (str): The raw password (will be hashed before saving).
-    email (str): The user's email address.
-    role (str): The user type, typically 'client', 'photographer', or 'developer'.
-    phone (str, optional): The user's phone number. Defaults to None.
-    address (str, optional): The user's physical address. Defaults to None.
-    profile_picture (file, optional): An uploaded image file for the user's avatar. Defaults to None.
-    bio (str, optional): A short biography (Only used if role is 'photographer'). Defaults to None.
-    experience_years (int, optional): Years of professional experience (Only used if role is 'photographer'). Defaults to 0.
-    price_per_hour (decimal/float, optional): Hourly booking rate (Only used if role is 'photographer'). Defaults to 0.
-    location (str, optional): Primary working location/city (Only used if role is 'photographer'). Defaults to None.
-
-
-    This function utilizes `transaction.atomic()`. This ensures that creating the Base User, 
-    creating the Profile, and creating the Photographer instance are treated as a single operation. 
-    If any step fails (e.g., the Photographer instance crashes), the entire transaction rolls back, 
-    preventing "orphan" or half-created user accounts in the database.
-
-    
-    This function is primarily called within `accounts/views.py`, specifically inside the 
-    `register_view` (or equivalent registration function) when a new user successfully submits 
-    the signup form via a POST request.
-
-    
-    tuple: (User object, boolean). The boolean is True if the user was successfully created, 
-    and False if the creation failed or the user already existed.
-"""
-def create_user_safely(username, password, email, role, phone=None, address=None, profile_picture=None, bio=None, experience_years=0, price_per_hour=0, location=None):
-    try:
-        with transaction.atomic():
-=======
 def create_user_safely(username, password, email, role, phone=None, address=None, profile_picture=None, bio=None, experience_years=0, price_per_hour=0, location=None):
     try:
         with transaction.atomic():
             # 1. Create User
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             user, created = User.objects.get_or_create(username=username, email=email)
             if not created:
                 return user, False
@@ -50,10 +13,7 @@ def create_user_safely(username, password, email, role, phone=None, address=None
             user.set_password(password)
             user.save()
 
-<<<<<<< HEAD
-=======
             # 2. Update Profile (It might be auto-created by signals, so we get_or_create)
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             profile, _ = Profile.objects.get_or_create(user=user)
             profile.role = role
             if phone: profile.phone = phone
@@ -61,10 +21,7 @@ def create_user_safely(username, password, email, role, phone=None, address=None
             if profile_picture: profile.profile_picture = profile_picture
             profile.save()
 
-<<<<<<< HEAD
-=======
             # 3. If Photographer, Create Photographer record
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             if role == 'photographer':
                 Photographer.objects.create(
                     user=user,

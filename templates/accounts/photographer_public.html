@@ -1,51 +1,4 @@
 {% extends 'base.html' %}
-<<<<<<< HEAD
-{% load static %}
-
-{% block title %}{{ photographer.user.username }} - SnapHire{% endblock %}
-
-{% block content %}
-<style>
-    :root {
-        --snap-gold: #C8962B;
-        --snap-ink: #1A1A1A;
-        --snap-surface: #FDFBF7;
-        --snap-border: rgba(200, 150, 43, 0.2);
-    }
-    body { background-color: #F8F6F2; color: var(--snap-ink); }
-    .font-serif { font-family: 'DM Serif Display', serif; }
-    
-    .profile-card { background: white; border: 1px solid var(--snap-border); border-radius: 16px; box-shadow: 0 10px 40px rgba(200, 150, 43, 0.05); }
-    .stat-box { background: var(--snap-surface); border: 1px solid var(--snap-border); border-radius: 10px; padding: 15px; text-align: center; }
-    .portfolio-item { border-radius: 12px; overflow: hidden; border: 1px solid var(--snap-border); background: white; }
-    .section-title { color: var(--snap-gold); border-bottom: 2px solid var(--snap-border); padding-bottom: 10px; margin-bottom: 30px; }
-</style>
-
-<div class="container py-5">
-    
-    <div class="profile-card mb-5 p-5">
-        <div class="row align-items-center">
-            <div class="col-md-3 text-center mb-4 mb-md-0">
-                {% if photographer.user.profile.profile_picture %}
-                    <img src="{{ photographer.user.profile.profile_picture.url }}" class="rounded-circle shadow-sm" style="width: 180px; height: 180px; object-fit: cover; border: 4px solid var(--snap-surface);">
-                {% else %}
-                    <div class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 180px; height: 180px; font-size: 4rem;">{{ photographer.user.username|first|upper }}</div>
-                {% endif %}
-            </div>
-            <div class="col-md-6">
-                <h1 class="font-serif display-4 fw-bold mb-1">{{ photographer.user.username }}</h1>
-                <p class="fs-5" style="color: var(--snap-gold);">📍 {{ photographer.location|default:"Available for hire" }}</p>
-                <p style="font-size: 16px; line-height: 1.6;">{{ photographer.bio|default:"No description provided." }}</p>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-box mb-3">
-                    <span class="d-block text-uppercase fw-bold text-muted" style="font-size: 11px;">Rate</span>
-                    <span class="h3 font-serif text-success mb-0">৳{{ photographer.price_per_hour }}/hr</span>
-                </div>
-                {% if request.user.profile.role != 'photographer' and request.user.profile.role != 'developer' %}
-                    <a href="{% url 'book_photographer' photographer.id %}" class="btn btn-dark w-100 fw-bold py-3" style="border-radius: 8px;">BOOK NOW</a>
-                {% endif %}
-=======
 
 {% block title %}{{ photographer.user.username }}'s Profile - SnapHire{% endblock %}
 
@@ -108,21 +61,10 @@
                 </div>
                 
                 <p class="mb-0 text-secondary">{{ photographer.bio|default:"This photographer hasn't written a bio yet." }}</p>
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             </div>
         </div>
     </div>
 
-<<<<<<< HEAD
-    <h2 class="font-serif section-title">Portfolio</h2>
-    <div class="row g-4 mb-5">
-        {% for p in portfolios %}
-            <div class="col-md-4">
-                <div class="portfolio-item h-100">
-                    <img src="{{ p.image.url }}" style="width: 100%; height: 250px; object-fit: cover;">
-                    {% if p.description %}
-                        <div class="p-3 bg-white border-top"><p class="mb-0 fw-bold" style="font-size: 14px;">{{ p.description }}</p></div>
-=======
     <!-- MIDDLE SECTION: Portfolio Grid -->
     <h3 class="mb-4 text-center border-bottom pb-2">Portfolio Showcase</h3>
     <div class="row mb-5">
@@ -136,36 +78,10 @@
                         <div class="card-body p-2 text-center">
                             <p class="small text-muted mb-0">{{ p.description }}</p>
                         </div>
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
                     {% endif %}
                 </div>
             </div>
         {% empty %}
-<<<<<<< HEAD
-            <div class="col-12"><p class="text-muted fw-bold">No portfolio items yet.</p></div>
-        {% endfor %}
-    </div>
-
-    <h2 class="font-serif section-title">Reviews</h2>
-    <div class="row g-4 mb-5">
-        {% for r in reviews %}
-            <div class="col-md-6">
-                <div class="p-4 h-100 shadow-sm" style="background: white; border: 1px solid var(--snap-border); border-radius: 14px;">
-                    <div class="mb-3" style="color: var(--snap-gold); font-size: 1.1rem;">
-                        {% for i in "12345"|make_list %}{% if forloop.counter <= r.rating %}★{% else %}<span style="color: #DDD;">★</span>{% endif %}{% endfor %}
-                    </div>
-                    <p class="fw-bold mb-4" style="font-size: 15px; font-style: italic;">"{{ r.comment }}"</p>
-                    <div class="d-flex align-items-center gap-3 border-top pt-3">
-                        <span class="fw-bold text-dark">{{ r.booking.client.username }}</span>
-                        <span class="text-muted small">{{ r.created_at|date:"M d, Y" }}</span>
-                    </div>
-                </div>
-            </div>
-        {% empty %}
-            <div class="col-12"><p class="text-muted fw-bold">No reviews yet.</p></div>
-        {% endfor %}
-    </div>
-=======
             <div class="col-12 text-center py-4">
                 <p class="text-muted">This photographer hasn't uploaded any portfolio images yet.</p>
             </div>
@@ -204,6 +120,5 @@
         </div>
     </div>
 
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 </div>
 {% endblock %}

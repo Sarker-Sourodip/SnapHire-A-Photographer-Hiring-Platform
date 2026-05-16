@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-<<<<<<< HEAD
 {% load static %}
 
 {% block title %}Edit Photographer Profile - SnapHire{% endblock %}
@@ -162,57 +161,4 @@
         }
     });
 </script>
-=======
-
-{% block title %}Edit Profile - SnapHire{% endblock %}
-
-{% block content %}
-<div class="container mt-5 mb-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-
-            <!-- A nice card container to keep the form centered and neat -->
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white border-bottom py-3">
-                    <h3 class="mb-0 text-primary">Edit Profile Settings</h3>
-                </div>
-
-                <div class="card-body p-4">
-
-                    <!-- Beautiful Bootstrap Alerts for Messages -->
-                    {% if messages %}
-                    {% for message in messages %}
-                    <!-- Maps Django message tags to Bootstrap alert colors (e.g., success, error->danger) -->
-                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
-                        role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-
-                    <!-- THE GOLDEN RULE: enctype="multipart/form-data" is REQUIRED for images -->
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-
-                        <h5 class="text-primary border-bottom pb-2">Basic Info & Picture</h5>
-                        {{ p_form.as_p }}
-
-                        <h5 class="text-primary border-bottom pb-2 mt-4">Professional Details</h5>
-                        {{ ph_form.as_p }}
-
-                        <hr class="my-4">
-                        <div class="d-flex justify-content-between">
-                            <a href="{% url 'photographer_dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-success px-5 shadow-sm">Save Changes</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
->>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 {% endblock %}
