@@ -4,65 +4,133 @@
 {% block title %}Photographer Dashboard - SnapHire{% endblock %}
 
 {% block content %}
-<div class="container mt-5 mb-5">
+<style>
+    /* --- RESTORING SNAPHRE COLOR PALETTE --- */
+    :root {
+        --snap-gold: #C8962B;
+        --snap-gold-lt: #E5C270;
+        --snap-ink: #1A1A1A;
+        --snap-muted: #555555;
+        --snap-surface: #FDFBF7; /* Original warm surface */
+        --snap-border: rgba(200, 150, 43, 0.2); /* Soft gold-tinted borders */
+    }
+
+    body {
+        background-color: #F8F6F2;
+        color: var(--snap-ink);
+    }
+
+    .page-badge {
+        display: inline-block;
+        background: rgba(200, 150, 43, 0.1);
+        border: 1px solid rgba(200, 150, 43, 0.2);
+        color: var(--snap-gold);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 20px;
+        margin-bottom: 12px;
+    }
+
+    .dashboard-card {
+        background: white;
+        border: 1px solid var(--snap-border);
+        border-radius: 14px;
+        box-shadow: 0 4px 20px rgba(200, 150, 43, 0.05);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .font-serif {
+        font-family: 'DM Serif Display', serif;
+    }
+
+    /* Table Styling */
+    .table thead th {
+        background-color: var(--snap-surface);
+        color: var(--snap-gold);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px solid var(--snap-border);
+        padding: 15px;
+    }
+
+    .table tbody td {
+        padding: 15px;
+        vertical-align: middle;
+        font-size: 14px;
+        border-bottom: 1px solid rgba(0,0,0,0.03);
+    }
+
+    /* Rating Box */
+    .rating-summary {
+        background: var(--snap-ink);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid var(--snap-gold);
+    }
+</style>
+
+<div class="container py-5">
     
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-end mb-5">
         <div>
-            <h2 class="font-serif">Welcome back, {{ request.user.username }}!</h2>
-            <p class="text-muted small">Manage your bookings, portfolio, and view your <strong>{{ avg_rating|floatformat:1 }}★</strong> rating.</p>
+            <span class="page-badge">Control Center</span>
+            <h1 class="font-serif display-5 mb-0">Welcome, {{ request.user.username }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
-            <div class="px-3 py-2 rounded-3 text-white" style="background: var(--snap-dark); border: 1px solid var(--snap-gold);">
-                <span style="color: var(--snap-gold-lt); font-weight: bold;">{{ avg_rating|floatformat:1 }} ★</span>
-                <span style="font-size: 11px; margin-left: 5px; opacity: 0.8; text-transform: uppercase;">Overall Rating</span>
+            <div class="rating-summary shadow-sm">
+                <span style="color: var(--snap-gold-lt); font-size: 1.5rem; font-weight: 800;">{{ avg_rating|floatformat:1 }}★</span>
+                <div style="font-size: 9px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.2;">Overall<br>Rating</div>
             </div>
-            <a href="{% url 'photographer_setup' %}" class="btn btn-primary shadow-sm">⚙️ Profile Settings</a>
+            <a href="{% url 'photographer_setup' %}" class="btn btn-outline-dark px-4 fw-bold" style="border-radius: 10px; font-size: 13px;">⚙️ SETTINGS</a>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm h-100 border-0" style="background: var(--snap-surface); border: 1px solid var(--snap-border) !important;">
-                <div class="card-body text-center">
-                    {% if request.user.profile.profile_picture %}
-                        <img src="{{ request.user.profile.profile_picture.url }}" class="rounded-circle mb-3 border" style="width: 150px; height: 150px; object-fit: cover;">
-                    {% else %}
-                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px; font-size: 3rem;">
-                            {{ request.user.username|first|upper }}
-                        </div>
-                    {% endif %}
-                    
-                    <h4 class="card-title text-primary">{{ request.user.username }}</h4>
-                    <p class="text-muted mb-3">📍 {{ photographer.location|default:"No location set" }}</p>
-                    <div class="d-flex justify-content-around mb-3">
-                        <div><h5>{{ photographer.experience_years }}</h5><small class="text-muted">Years Exp.</small></div>
-                        <div><h5 class="text-success">৳{{ photographer.price_per_hour }}</h5><small class="text-muted">Per Hour</small></div>
-                    </div>
-                    <hr>
-                    <div class="text-start" style="font-size: 13px;">
-                        <p class="mb-1"><strong>Email:</strong> {{ request.user.email }}</p>
-                        <p class="mb-1"><strong>Phone:</strong> {{ request.user.profile.phone|default:"Not provided" }}</p>
-                    </div>
+        <div class="col-md-4">
+            <div class="dashboard-card p-4 text-center">
+                {% if request.user.profile.profile_picture %}
+                    <img src="{{ request.user.profile.profile_picture.url }}" class="rounded-circle mb-3 shadow-sm" style="width: 140px; height: 140px; object-fit: cover; border: 3px solid var(--snap-surface);">
+                {% else %}
+                    <div class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 140px; height: 140px; font-size: 3rem;">{{ request.user.username|first|upper }}</div>
+                {% endif %}
+                
+                <h3 class="font-serif mb-1">{{ request.user.username }}</h3>
+                <p class="small fw-bold mb-4" style="color: var(--snap-gold);">📍 {{ photographer.location|default:"Not set" }}</p>
+                
+                <div class="text-start p-3 rounded" style="background: var(--snap-surface); font-size: 13px; border: 1px solid var(--snap-border);">
+                    <p class="mb-2"><strong>Email:</strong> {{ request.user.email }}</p>
+                    <p class="mb-2"><strong>Phone:</strong> {{ request.user.profile.phone|default:"N/A" }}</p>
+                    <p class="mb-0"><strong>Experience:</strong> {{ photographer.experience_years }} Years</p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-8">
-            <div class="card shadow-sm mb-4 h-100 border-0" style="border: 1px solid var(--snap-border) !important;">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                    <h5 class="mb-0">Your Portfolio</h5>
-                    <a href="{% url 'portfolio_create' %}" class="btn btn-sm btn-success">+ Add New Photo</a>
+            <div class="dashboard-card h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 border-bottom">
+                    <h5 class="mb-0 font-serif" style="color: var(--snap-gold);">Your Gallery</h5>
+                    <a href="{% url 'portfolio_create' %}" class="btn btn-sm btn-dark px-3 fw-bold" style="border-radius: 6px;">+ ADD PHOTO</a>
                 </div>
-                <div class="card-body overflow-auto" style="max-height: 600px;">
-                    <div class="row">
+                <div class="card-body p-4 overflow-auto" style="max-height: 500px;">
+                    <div class="row g-3">
                         {% for p in portfolios %}
-                        <div class="col-sm-6 col-md-4 mb-4">
-                            <div class="card h-100 border-0 shadow-sm">
-                                <img src="{{ p.image.url }}" class="card-img-top" style="height: 180px; object-fit: cover;">
-                                <div class="card-body text-center p-2 bg-white">
+                        <div class="col-sm-6 col-md-4">
+                            <div class="card h-100 border-0 shadow-sm overflow-hidden" style="border-radius: 10px;">
+                                <img src="{{ p.image.url }}" style="height: 140px; object-fit: cover;">
+                                <div class="card-body p-2 text-center">
+                                    <p class="small fw-bold text-dark mb-2 text-truncate">{{ p.description|default:"(No desc)" }}</p>
                                     <div class="btn-group w-100">
-                                        <a href="{% url 'portfolio_edit' p.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                        <a href="{% url 'portfolio_delete' p.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                        <a href="{% url 'portfolio_edit' p.pk %}" class="btn btn-sm btn-outline-secondary" style="font-size: 10px;">Edit</a>
+                                        <a href="{% url 'portfolio_delete' p.pk %}" class="btn btn-sm btn-outline-danger" style="font-size: 10px;">Delete</a>
                                     </div>
                                 </div>
                             </div>
@@ -74,20 +142,28 @@
         </div>
     </div>
 
-    <div class="card shadow-sm border-0 mt-4">
-        <div class="card-header bg-dark text-white py-3"><h5 class="mb-0">Incoming Booking Requests</h5></div>
+    <div class="dashboard-card mt-4">
+        <div class="card-header py-3" style="background: var(--snap-ink); color: white;">
+            <h5 class="mb-0">Recent Booking Requests</h5>
+        </div>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light"><tr style="font-size: 11px; text-transform: uppercase;">
-                    <th class="ps-4">Client</th><th>Phone Number</th><th>Date</th><th>Type</th><th class="text-center pe-4">Action</th>
-                </tr></thead>
-                <tbody style="font-size: 13px;">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Client</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th class="text-center pe-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {% for b in bookings %}
                     <tr>
                         <td class="fw-bold ps-4">{{ b.client.username }}</td>
                         <td class="fw-bold" style="color: var(--snap-gold);">{{ b.client.profile.phone|default:"N/A" }}</td>
-                        <td>{{ b.event_date|date:"M d, Y" }}</td>
-                        <td><span class="badge bg-info text-dark">{{ b.event_type }}</span></td>
+                        <td class="text-muted">{{ b.event_date|date:"M d, Y" }}</td>
+                        <td><span class="badge bg-light text-dark border px-2 py-1">{{ b.event_type }}</span></td>
                         <td class="text-center pe-4">
                             {% if b.status == 'pending' %}
                                 <div class="btn-group">
@@ -95,12 +171,9 @@
                                     <a href="{% url 'update_booking_status' b.id 'rejected' %}" class="btn btn-sm btn-outline-danger">Reject</a>
                                 </div>
                             {% elif b.status == 'accepted' %}
-                                <span class="badge" style="background: #E8F5EF; color: #0D9488;">Accepted</span>
-                                <a href="{% url 'update_booking_status' b.id 'completed' %}" class="btn btn-sm btn-primary ms-2" style="font-size: 11px;">Finish Job</a>
-                            {% elif b.status == 'completed' %}
-                                <span class="badge" style="background: #EEF2FF; color: #4338CA;">Completed</span>
+                                <a href="{% url 'update_booking_status' b.id 'completed' %}" class="btn btn-sm btn-primary fw-bold">FINISH JOB</a>
                             {% else %}
-                                <span class="badge bg-light text-muted">{{ b.status|title }}</span>
+                                <span class="small fw-bold text-muted">{{ b.status|upper }}</span>
                             {% endif %}
                         </td>
                     </tr>
@@ -110,23 +183,44 @@
         </div>
     </div>
 
-    <div class="mt-5 mb-4"><h3 class="font-serif">Client Feedback</h3></div>
+    <div class="mt-5 mb-4">
+        <h2 class="font-serif" style="color: var(--snap-gold);">Client Feedback</h2>
+    </div>
+
     <div class="row g-4">
         {% for r in reviews %}
         <div class="col-md-6 col-lg-4">
-            <div class="p-4 rounded-3 h-100 shadow-sm" style="background: white; border: 1px solid var(--snap-border);">
-                <div class="mb-2" style="color: var(--snap-gold);">
-                    {% for i in "12345"|make_list %}{% if forloop.counter <= r.rating %}★{% else %}<span style="color: #ddd;">★</span>{% endif %}{% endfor %}
+            <div class="p-4 h-100 shadow-sm" style="background: white; border: 1px solid var(--snap-border); border-radius: 14px;">
+                <div class="mb-3" style="color: var(--snap-gold);">
+                    {% for i in "12345"|make_list %}{% if forloop.counter <= r.rating %}★{% else %}<span style="color: #DDD;">★</span>{% endif %}{% endfor %}
                 </div>
-                <p class="italic text-muted mb-4" style="font-size: 14px; line-height: 1.6;">"{{ r.comment }}"</p>
-                <div class="d-flex align-items-center gap-2 border-top pt-3">
-                    <div style="width: 32px; height: 32px; background: var(--snap-tag); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--snap-gold); font-size: 12px;">{{ r.client.username|first|upper }}</div>
-                    <div style="font-size: 12px;"><span class="d-block fw-bold">{{ r.client.username }}</span><span class="text-muted">{{ r.created_at|date:"M d, Y" }}</span></div>
+                
+                <p class="fw-bold mb-4" style="font-size: 14px; line-height: 1.6; font-style: italic; color: var(--snap-ink);">
+                    "{{ r.comment }}"
+                </p>
+
+                <div class="d-flex align-items-center gap-3 border-top pt-3">
+                    {% if r.booking.client.profile.profile_picture %}
+                        <img src="{{ r.booking.client.profile.profile_picture.url }}" 
+                             style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1px solid var(--snap-border);">
+                    {% else %}
+                        <div class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width: 44px; height: 44px; font-weight: 800; font-size: 14px;">
+                            {{ r.booking.client.username|first|upper }}
+                        </div>
+                    {% endif %}
+                    
+                    <div>
+                        <span class="d-block fw-bold" style="font-size: 14px; color: var(--snap-ink);">{{ r.booking.client.username }}</span>
+                        <span class="text-muted fw-bold" style="font-size: 11px;">{{ r.created_at|date:"M d, Y" }}</span>
+                    </div>
                 </div>
             </div>
         </div>
         {% empty %}
-        <div class="col-12 text-center py-5 text-muted">No reviews found yet.</div>
+        <div class="col-12 text-center py-5">
+            <p class="text-muted fw-bold">No reviews yet.</p>
+        </div>
         {% endfor %}
     </div>
 </div>
