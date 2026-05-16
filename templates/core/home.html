@@ -1,30 +1,36 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}SnapHire - Book Talented Photographers{% endblock %}
+{% block title %}SnapHire - Bangladesh's Photographer Marketplace{% endblock %}
 
 {% block content %}
 <style>
-  /* We only write custom CSS here for things Bootstrap CAN'T do natively, 
-    like the custom background color, specific font sizing, and the overlapping photo grid.
-  */
+  /* --- HOME PAGE SPECIFIC STYLES --- */
+  
+  /* Full-height dark wrapper to match the Hero design */
   .hero-wrapper {
     background-color: var(--snap-dark);
-    min-height: 85vh;
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
     color: #ffffff;
+    padding: 60px 0;
   }
   
   .hero-eyebrow {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--snap-gold);
+    margin-bottom: 16px;
   }
   
   .hero-heading {
-    font-size: 3.5rem;
+    font-size: 4.2rem;
     line-height: 1.1;
+    font-weight: 400;
+    margin-bottom: 20px;
   }
   
   .hero-heading em {
@@ -33,102 +39,157 @@
   }
   
   .hero-sub {
-    color: rgba(255, 255, 255, 0.6);
     font-size: 1.1rem;
-    max-width: 500px;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 460px;
+    line-height: 1.7;
+    margin-bottom: 35px;
   }
 
-  /* The overlapping photo grid on the right side */
+  /* --- STATS SECTION --- */
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--snap-gold-lt);
+    display: block;
+    line-height: 1;
+  }
+  
+  .stat-lbl {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* --- HERO VISUAL GRID (Right Side) --- */
   .hero-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    max-width: 400px;
-    margin: 0 auto;
+    max-width: 420px;
+    margin-left: auto;
   }
   
   .hero-thumb {
     border-radius: 12px;
     aspect-ratio: 1;
-    position: relative;
     overflow: hidden;
+    position: relative;
+    background: var(--snap-ink);
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.3s ease;
+  }
+
+  .hero-thumb:hover {
+    transform: translateY(-5px);
   }
   
+  /* Large wedding card spans both columns */
   .hero-thumb.large {
     grid-column: 1 / -1;
     aspect-ratio: 16/9;
     background: linear-gradient(135deg, #3d2b10, #6b4a22);
-    font-size: 4rem;
+    font-size: 60px;
   }
   
-  .hero-thumb.small-1 { background: linear-gradient(135deg, #1a2f3e, #2d5268); font-size: 2.5rem; }
-  .hero-thumb.small-2 { background: linear-gradient(135deg, #1e3a28, #2e5c3c); font-size: 2.5rem; }
+  .hero-thumb.portrait { background: linear-gradient(135deg, #1a2f3e, #2d5268); font-size: 40px; }
+  .hero-thumb.corporate { background: linear-gradient(135deg, #1e3a28, #2e5c3c); font-size: 40px; }
 
   .thumb-label {
     position: absolute;
-    bottom: 12px; 
-    left: 12px;
-    font-size: 12px;
+    bottom: 10px; left: 10px;
+    font-size: 11px;
+    color: #fff;
     font-weight: 500;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.5);
     padding: 4px 10px;
     border-radius: 6px;
     backdrop-filter: blur(4px);
   }
-  
+
   .thumb-rating {
     position: absolute;
-    top: 12px; 
-    right: 12px;
-    font-size: 12px;
+    top: 10px; right: 10px;
+    font-size: 11px;
     color: var(--snap-gold-lt);
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.5);
     padding: 4px 10px;
     border-radius: 6px;
   }
+
+  /* Responsive Fixes */
+  @media (max-width: 991px) {
+    .hero-heading { font-size: 3.2rem; }
+    .hero-wrapper { text-align: center; }
+    .hero-sub { margin-left: auto; margin-right: auto; }
+    .hero-stats { justify-content: center; }
+    .hero-btns { justify-content: center; }
+  }
 </style>
 
-<div class="container-fluid hero-wrapper d-flex align-items-center py-5">
+<div class="container-fluid hero-wrapper">
   <div class="container">
-    
     <div class="row align-items-center gy-5">
       
       <div class="col-lg-6">
-        <div class="hero-eyebrow mb-3">Bangladesh's Photographer Marketplace</div>
+        <div class="hero-eyebrow">Bangladesh's Photographer Marketplace</div>
         
-        <h1 class="hero-heading font-serif mb-4">
+        <h1 class="hero-heading font-serif">
           Book a<br>
           <em>talented</em><br>
           photographer<br>
           instantly.
         </h1>
         
-        <p class="hero-sub mb-4 pb-2">
+        <p class="hero-sub">
           SnapHire connects clients with professional photographers — for weddings, portraits, corporate events, and everything in between.
         </p>
         
-        <div class="d-flex flex-wrap gap-3 mb-5">
-          <a href="{% url 'photographers_list' %}" class="btn-gold px-4 py-3" style="font-size: 15px;">Find a Photographer</a>
-          <a href="{% url 'register' %}" class="btn-ghost px-4 py-3 d-flex align-items-center gap-2" style="font-size: 15px;">
-            📸 Join as Photographer
+        <div class="d-flex flex-wrap gap-3 hero-btns">
+          
+          {% if not user.is_authenticated %}
+            <a href="{% url 'login' %}" class="btn-gold px-4 py-3">Find a Photographer</a>
+          
+          {% elif user.profile.role == 'client' %}
+            <a href="{% url 'photographers_list' %}" class="btn-gold px-4 py-3">Find a Photographer</a>
+          
+          {% elif user.profile.role == 'photographer' %}
+            <a href="{% url 'photographer_dashboard' %}" class="btn-gold px-4 py-3">Go to Dashboard</a>
+          
+          {% elif user.profile.role == 'developer' %}
+            <a href="{% url 'developer_dashboard' %}" class="btn-gold px-4 py-3">Admin Panel</a>
+          {% endif %}
+
+          <a href="{% url 'register' %}" class="btn-ghost px-4 py-3 d-flex align-items-center gap-2">
+             Join as Photographer
           </a>
         </div>
 
-        <div class="d-flex gap-5 border-top pt-4" style="border-color: rgba(255,255,255,0.08) !important;">
-          <div>
-            <span class="d-block font-serif fs-2" style="color: var(--snap-gold-lt);">120+</span>
-            <span class="small" style="color: rgba(255,255,255,0.45);">Photographers</span>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num">120+</span>
+            <span class="stat-lbl">Photographers</span>
           </div>
-          <div>
-            <span class="d-block font-serif fs-2" style="color: var(--snap-gold-lt);">850+</span>
-            <span class="small" style="color: rgba(255,255,255,0.45);">Events Covered</span>
+          <div class="stat-item">
+            <span class="stat-num">850+</span>
+            <span class="stat-lbl">Events Covered</span>
           </div>
-          <div>
-            <span class="d-block font-serif fs-2" style="color: var(--snap-gold-lt);">4.8★</span>
-            <span class="small" style="color: rgba(255,255,255,0.45);">Avg Rating</span>
+          <div class="stat-item">
+            <span class="stat-num">4.8★</span>
+            <span class="stat-lbl">Avg Rating</span>
           </div>
         </div>
       </div>
@@ -137,17 +198,17 @@
         <div class="hero-grid">
           
           <div class="hero-thumb large">
-            👤
+            📸
             <div class="thumb-label">Wedding Photography</div>
             <div class="thumb-rating">★ 4.9</div>
           </div>
           
-          <div class="hero-thumb small-1">
+          <div class="hero-thumb portrait">
             🎭
             <div class="thumb-label">Portrait</div>
           </div>
           
-          <div class="hero-thumb small-2">
+          <div class="hero-thumb corporate">
             🏢
             <div class="thumb-label">Corporate</div>
           </div>
@@ -158,4 +219,5 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
