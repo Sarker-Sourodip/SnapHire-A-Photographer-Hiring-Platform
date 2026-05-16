@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 from .models import Profile, Portfolio, Review, Photographer, Booking
 
+<<<<<<< HEAD
 """
 Handles the comprehensive registration process for all new platform users.
 It collects core authentication details (username, email, passwords), general 
@@ -18,16 +19,31 @@ class RegistrationForm(forms.ModelForm):
     password_confirm = forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     role = forms.ChoiceField(choices=Profile.ROLE_CHOICES, widget=forms.Select(attrs={'class': 'form-select', 'id': 'role-select'}))
 
+=======
+class RegistrationForm(forms.ModelForm): # Assuming you are using ModelForm for User
+    password1 = forms.CharField(label = "Password",widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password_confirm = forms.CharField(label = "Conform Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    role = forms.ChoiceField(choices=Profile.ROLE_CHOICES, widget=forms.Select(attrs={'class': 'form-select', 'id': 'role-select'}))
+
+    # --- Profile Fields ---
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     phone = forms.CharField(max_length=15, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     address = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
     profile_picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
 
+<<<<<<< HEAD
+=======
+    # --- Photographer Fields (Hidden by default in HTML) ---
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}))
     experience_years = forms.IntegerField(required=False, initial=0, widget=forms.NumberInput(attrs={'class': 'form-control'}))
     price_per_hour = forms.DecimalField(required=False, max_digits=10, decimal_places=2, initial=0.00, widget=forms.NumberInput(attrs={'class': 'form-control'}))
     location = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     class Meta:
         model = User
         fields = ['username', 'email']
@@ -36,6 +52,7 @@ class RegistrationForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
+<<<<<<< HEAD
 
     """
     Performs custom validation on the submitted registration data before processing.
@@ -44,10 +61,16 @@ class RegistrationForm(forms.ModelForm):
     that a profile picture, location, and hourly rate were explicitly provided, appending 
     errors to the form if the data is missing.
     """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     def clean(self):
         cleaned_data = super().clean()
         role = cleaned_data.get('role')
 
+<<<<<<< HEAD
+=======
+        # If they register as a photographer, strictly enforce these fields
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
         if role == 'photographer':
             if not cleaned_data.get('profile_picture'):
                 self.add_error('profile_picture', 'Photographers must upload a profile picture.')
@@ -58,6 +81,7 @@ class RegistrationForm(forms.ModelForm):
             
         return cleaned_data
 
+<<<<<<< HEAD
 
 """
 Facilitates standard user authentication by extending Django's built-in AuthenticationForm.
@@ -65,21 +89,27 @@ It captures the username and password inputs required to verify credentials agai
 the database. This form is rendered on the primary login page to establish a secure 
 user session and route them to their appropriate dashboard.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Username")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
 
 
+<<<<<<< HEAD
 """
 Manages a specialized subset of Profile data, specifically prioritizing the upload 
 of a user's avatar alongside basic contact details (phone and address).
 It is typically utilized in onboarding flows or setup views where a profile picture 
 needs to be strictly enforced before a photographer can proceed.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class PhotographerForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_picture', 'phone', 'address']
+<<<<<<< HEAD
 
 
     """
@@ -102,18 +132,34 @@ It collects an image file and an optional text description, tying them to the Po
 This is implemented in the photographer dashboard to allow users to dynamically grow 
 their visible body of work on their public profile.
 """
+=======
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # THIS IS THE MAGIC LINE: It forces the photographer to upload a picture
+        self.fields['profile_picture'].required = True
+        
+        # Optional: Add Bootstrap classes to make it look nice
+        self.fields['profile_picture'].widget.attrs.update({'class': 'form-control'})
+
+
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class PortfolioForm(forms.ModelForm):
     class Meta:
         model = Portfolio
         fields = ['image', 'description']
 
 
+<<<<<<< HEAD
 """
 Allows existing users to safely modify their overarching identity parameters.
 It binds to the Profile model to collect updates for the profile picture, phone number, 
 and physical address, applying standard HTML constraints and CSS classes. 
 This form powers the general account settings page for both clients and photographers.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -125,6 +171,7 @@ class ProfileUpdateForm(forms.ModelForm):
         }
 
 
+<<<<<<< HEAD
 """
 Permits active creators to update their business-specific metadata.
 It connects to the Photographer model to capture revisions to their biography, 
@@ -132,6 +179,8 @@ years of experience, billing rate, and operational location.
 This form is rendered inside the photographer dashboard's profile editing section 
 to ensure their public directory listing remains accurate.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class PhotographerUpdateForm(forms.ModelForm):
     class Meta:
         model = Photographer
@@ -144,6 +193,7 @@ class PhotographerUpdateForm(forms.ModelForm):
         }
 
 
+<<<<<<< HEAD
 """
 Facilitates the creation of a new job request from a client to a photographer.
 It captures the proposed event date, the type of occasion, the physical location, 
@@ -159,6 +209,17 @@ class BookingForm(forms.ModelForm):
         widgets = {
             'event_date': forms.DateTimeInput(attrs={
                 'type': 'datetime-local', 
+=======
+class BookingForm(forms.ModelForm):
+    class Meta:
+        model = Booking
+        fields = ['event_date', 'event_type', 'location', 'message']
+        
+        # Widgets make the HTML look nice and add things like the date-picker calendar
+        widgets = {
+            'event_date': forms.DateInput(attrs={
+                'type': 'date', 
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
                 'class': 'form-control'
             }),
             'event_type': forms.TextInput(attrs={
@@ -169,7 +230,11 @@ class BookingForm(forms.ModelForm):
                 'class': 'form-control', 
                 'placeholder': 'Full address or venue name'
             }),
+<<<<<<< HEAD
             'notes': forms.Textarea(attrs={
+=======
+            'message': forms.Textarea(attrs={
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
                 'class': 'form-control', 
                 'rows': 4, 
                 'placeholder': 'Tell the photographer about your vision, schedule, and any special requests...'
@@ -177,12 +242,15 @@ class BookingForm(forms.ModelForm):
         }
 
 
+<<<<<<< HEAD
 """
 Collects post-event feedback from clients after a job reaches the 'completed' status.
 It is bound to the Review model to take in a numeric rating and written commentary.
 This form is served within the client dashboard to help build aggregate scores 
 and public testimonials for the photographers.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review

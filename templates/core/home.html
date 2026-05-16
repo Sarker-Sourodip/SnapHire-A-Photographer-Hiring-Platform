@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+<<<<<<< HEAD
 {% load static %}
 
 {% block title %}SnapHire - Bangladesh's Photographer Marketplace{% endblock %}
@@ -19,10 +20,29 @@
   
   .hero-eyebrow {
     font-size: 11px;
+=======
+
+{% block title %}SnapHire - Book Talented Photographers{% endblock %}
+
+{% block content %}
+<style>
+  /* We only write custom CSS here for things Bootstrap CAN'T do natively, 
+    like the custom background color, specific font sizing, and the overlapping photo grid.
+  */
+  .hero-wrapper {
+    background-color: var(--snap-dark);
+    min-height: 85vh;
+    color: #ffffff;
+  }
+  
+  .hero-eyebrow {
+    font-size: 12px;
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--snap-gold);
+<<<<<<< HEAD
     margin-bottom: 16px;
   }
   
@@ -31,6 +51,13 @@
     line-height: 1.1;
     font-weight: 400;
     margin-bottom: 20px;
+=======
+  }
+  
+  .hero-heading {
+    font-size: 3.5rem;
+    line-height: 1.1;
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
   }
   
   .hero-heading em {
@@ -39,6 +66,7 @@
   }
   
   .hero-sub {
+<<<<<<< HEAD
     font-size: 1.1rem;
     color: rgba(255, 255, 255, 0.6);
     max-width: 460px;
@@ -73,17 +101,31 @@
   }
 
   /* --- HERO VISUAL GRID (Right Side) --- */
+=======
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+    max-width: 500px;
+  }
+
+  /* The overlapping photo grid on the right side */
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
   .hero-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
+<<<<<<< HEAD
     max-width: 420px;
     margin-left: auto;
+=======
+    max-width: 400px;
+    margin: 0 auto;
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
   }
   
   .hero-thumb {
     border-radius: 12px;
     aspect-ratio: 1;
+<<<<<<< HEAD
     overflow: hidden;
     position: relative;
     background: var(--snap-ink);
@@ -98,10 +140,20 @@
   }
   
   /* Large wedding card spans both columns */
+=======
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
   .hero-thumb.large {
     grid-column: 1 / -1;
     aspect-ratio: 16/9;
     background: linear-gradient(135deg, #3d2b10, #6b4a22);
+<<<<<<< HEAD
     font-size: 60px;
   }
   
@@ -115,10 +167,26 @@
     color: #fff;
     font-weight: 500;
     background: rgba(0,0,0,0.5);
+=======
+    font-size: 4rem;
+  }
+  
+  .hero-thumb.small-1 { background: linear-gradient(135deg, #1a2f3e, #2d5268); font-size: 2.5rem; }
+  .hero-thumb.small-2 { background: linear-gradient(135deg, #1e3a28, #2e5c3c); font-size: 2.5rem; }
+
+  .thumb-label {
+    position: absolute;
+    bottom: 12px; 
+    left: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(0,0,0,0.6);
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     padding: 4px 10px;
     border-radius: 6px;
     backdrop-filter: blur(4px);
   }
+<<<<<<< HEAD
 
   .thumb-rating {
     position: absolute;
@@ -148,12 +216,37 @@
         <div class="hero-eyebrow">Bangladesh's Photographer Marketplace</div>
         
         <h1 class="hero-heading font-serif">
+=======
+  
+  .thumb-rating {
+    position: absolute;
+    top: 12px; 
+    right: 12px;
+    font-size: 12px;
+    color: var(--snap-gold-lt);
+    background: rgba(0,0,0,0.6);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+</style>
+
+<div class="container-fluid hero-wrapper d-flex align-items-center py-5">
+  <div class="container">
+    
+    <div class="row align-items-center gy-5">
+      
+      <div class="col-lg-6">
+        <div class="hero-eyebrow mb-3">Bangladesh's Photographer Marketplace</div>
+        
+        <h1 class="hero-heading font-serif mb-4">
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
           Book a<br>
           <em>talented</em><br>
           photographer<br>
           instantly.
         </h1>
         
+<<<<<<< HEAD
         <p class="hero-sub">
           SnapHire connects clients with professional photographers — for weddings, portraits, corporate events, and everything in between.
         </p>
@@ -190,6 +283,31 @@
           <div class="stat-item">
             <span class="stat-num">4.8★</span>
             <span class="stat-lbl">Avg Rating</span>
+=======
+        <p class="hero-sub mb-4 pb-2">
+          SnapHire connects clients with professional photographers — for weddings, portraits, corporate events, and everything in between.
+        </p>
+        
+        <div class="d-flex flex-wrap gap-3 mb-5">
+          <a href="{% url 'photographers_list' %}" class="btn-gold px-4 py-3" style="font-size: 15px;">Find a Photographer</a>
+          <a href="{% url 'register' %}" class="btn-ghost px-4 py-3 d-flex align-items-center gap-2" style="font-size: 15px;">
+            📸 Join as Photographer
+          </a>
+        </div>
+
+        <div class="d-flex gap-5 border-top pt-4" style="border-color: rgba(255,255,255,0.08) !important;">
+          <div>
+            <span class="d-block font-serif fs-2" style="color: var(--snap-gold-lt);">120+</span>
+            <span class="small" style="color: rgba(255,255,255,0.45);">Photographers</span>
+          </div>
+          <div>
+            <span class="d-block font-serif fs-2" style="color: var(--snap-gold-lt);">850+</span>
+            <span class="small" style="color: rgba(255,255,255,0.45);">Events Covered</span>
+          </div>
+          <div>
+            <span class="d-block font-serif fs-2" style="color: var(--snap-gold-lt);">4.8★</span>
+            <span class="small" style="color: rgba(255,255,255,0.45);">Avg Rating</span>
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
           </div>
         </div>
       </div>
@@ -198,17 +316,29 @@
         <div class="hero-grid">
           
           <div class="hero-thumb large">
+<<<<<<< HEAD
             📸
+=======
+            👤
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             <div class="thumb-label">Wedding Photography</div>
             <div class="thumb-rating">★ 4.9</div>
           </div>
           
+<<<<<<< HEAD
           <div class="hero-thumb portrait">
+=======
+          <div class="hero-thumb small-1">
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             🎭
             <div class="thumb-label">Portrait</div>
           </div>
           
+<<<<<<< HEAD
           <div class="hero-thumb corporate">
+=======
+          <div class="hero-thumb small-2">
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             🏢
             <div class="thumb-label">Corporate</div>
           </div>
@@ -219,5 +349,8 @@
     </div>
   </div>
 </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 {% endblock %}

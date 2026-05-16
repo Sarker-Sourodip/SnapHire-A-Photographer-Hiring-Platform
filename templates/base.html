@@ -1,16 +1,24 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
 
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}SnapHire{% endblock %}</title>
 
+<<<<<<< HEAD
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet">
 
+=======
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
@@ -23,7 +31,11 @@
       --snap-gold-lt: #F2D98A;
       --snap-warm: #F7F2EA;
       --snap-muted: #7a6d5e;
+<<<<<<< HEAD
       --snap-border: rgba(200, 150, 43, 0.18);
+=======
+      --snap-border: rgba(200,150,43,0.18);
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
       --snap-dark: #2b1f0e;
       --snap-surface: #FEFAF4;
       --snap-green: #2E7D52;
@@ -35,7 +47,11 @@
     body {
       font-family: 'DM Sans', sans-serif;
       /* Default background is the warm light color for Dashboards */
+<<<<<<< HEAD
       background-color: var(--snap-warm);
+=======
+      background-color: var(--snap-warm); 
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
       color: var(--snap-ink);
     }
 
@@ -59,12 +75,16 @@
       align-items: center;
       gap: 8px;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     .nav-logo-text {
       font-family: 'DM Serif Display', serif;
       font-size: 24px;
       color: var(--snap-gold-lt);
     }
+<<<<<<< HEAD
 
     .nav-lens {
       width: 28px;
@@ -79,6 +99,16 @@
     .nav-lens-inner {
       width: 12px;
       height: 12px;
+=======
+    .nav-lens {
+      width: 28px; height: 28px;
+      border: 2px solid var(--snap-gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-lens-inner {
+      width: 12px; height: 12px;
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
       background: var(--snap-gold);
       border-radius: 50%;
     }
@@ -91,9 +121,15 @@
       transition: color 0.15s;
       margin: 0 8px;
     }
+<<<<<<< HEAD
 
     /* Dynamic Active State */
     .snap-navbar .nav-link:hover,
+=======
+    
+    /* Dynamic Active State */
+    .snap-navbar .nav-link:hover, 
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     .snap-navbar .nav-link.active {
       color: var(--snap-gold-lt) !important;
     }
@@ -101,21 +137,35 @@
     /* Global Navbar Buttons */
     .btn-ghost {
       font-size: 13px;
+<<<<<<< HEAD
       color: rgba(255, 255, 255, 0.7);
       background: transparent;
       border: 1px solid rgba(255, 255, 255, 0.15);
+=======
+      color: rgba(255,255,255,0.7);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
       padding: 8px 18px;
       border-radius: 6px;
       font-weight: 500;
       text-decoration: none;
       transition: border-color 0.15s, color 0.15s;
     }
+<<<<<<< HEAD
 
     .btn-ghost:hover {
       border-color: var(--snap-gold);
       color: var(--snap-gold-lt);
     }
 
+=======
+    .btn-ghost:hover { 
+      border-color: var(--snap-gold); 
+      color: var(--snap-gold-lt); 
+    }
+    
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     .btn-gold {
       font-size: 13px;
       background: var(--snap-gold);
@@ -127,9 +177,14 @@
       text-decoration: none;
       transition: background 0.15s;
     }
+<<<<<<< HEAD
 
     .btn-gold:hover {
       background: var(--snap-gold-lt);
+=======
+    .btn-gold:hover { 
+      background: var(--snap-gold-lt); 
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     }
   </style>
 </head>
@@ -139,9 +194,13 @@
     <div class="container-fluid">
 
       <a class="navbar-brand nav-logo-link" href="{% url 'home' %}">
+<<<<<<< HEAD
         <div class="nav-lens">
           <div class="nav-lens-inner"></div>
         </div>
+=======
+        <div class="nav-lens"><div class="nav-lens-inner"></div></div>
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
         <span class="nav-logo-text">SnapHire</span>
       </a>
 
@@ -150,6 +209,7 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
+<<<<<<< HEAD
 
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
           <li class="nav-item">
@@ -168,10 +228,27 @@
           <li class="nav-item"><a
               class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
               href="{% url 'contact' %}">Contact</a></li>
+=======
+        
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
+          </li>
+
+          {% if user.is_authenticated and user.profile.role == 'client' %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.url_name == 'photographers_list' %}active{% endif %}" href="{% url 'photographers_list' %}">Photographers</a>
+            </li>
+          {% endif %}
+
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">About</a></li>
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">Contact</a></li>
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
         </ul>
 
         <ul class="navbar-nav ms-auto align-items-center gap-3">
           {% if user.is_authenticated %}
+<<<<<<< HEAD
           <li class="nav-item d-none d-lg-block">
             <span class="nav-link" style="color: rgba(255,255,255,0.4) !important;">Hello, {{ user.username }}</span>
           </li>
@@ -197,6 +274,33 @@
           <li class="nav-item">
             <a class="btn-gold" href="{% url 'register' %}">Register</a>
           </li>
+=======
+            <li class="nav-item d-none d-lg-block">
+              <span class="nav-link" style="color: rgba(255,255,255,0.4) !important;">Hello, {{ user.username }}</span>
+            </li>
+
+            <li class="nav-item">
+              {% if request.session.role == 'photographer' %}
+                <a class="btn-ghost" href="{% url 'photographer_dashboard' %}">Dashboard</a>
+              {% elif request.session.role == 'client' %}
+                <a class="btn-ghost" href="{% url 'client_dashboard' %}">Dashboard</a>
+              {% elif request.session.role == 'developer' %}
+                <a class="btn-ghost" href="{% url 'developer_dashboard' %}">Dashboard</a>
+              {% endif %}
+            </li>
+
+            <li class="nav-item">
+              <a class="btn-ghost border-0 text-danger" href="{% url 'logout' %}">Logout</a>
+            </li>
+
+          {% else %}
+            <li class="nav-item">
+              <a class="btn-ghost" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn-gold" href="{% url 'register' %}">Register</a>
+            </li>
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
           {% endif %}
         </ul>
 
@@ -207,6 +311,7 @@
   {% block content %}
   {% endblock %}
 
+<<<<<<< HEAD
   <script>
     // This detects if the browser loaded the page from its internal "Back Button" cache
     window.addEventListener('pageshow', function (event) {
@@ -220,4 +325,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
+=======
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 </html>

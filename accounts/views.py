@@ -1,17 +1,30 @@
+<<<<<<< HEAD
 from django.shortcuts import render, redirect, get_object_or_404
+=======
+from django.shortcuts import render, redirect
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
+<<<<<<< HEAD
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.db.models import Avg, Count, Q, Value
 from django.db.models.functions import Coalesce
+=======
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
+from django.utils import timezone
+from django.db.models import Avg, Count
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 from functools import wraps
 
 from .forms import RegistrationForm, LoginForm, PhotographerForm, PortfolioForm, ReviewForm, BookingForm, PhotographerUpdateForm, ProfileUpdateForm
 from .models import Photographer, Profile, Portfolio, Booking, Review
+<<<<<<< HEAD
 from .services import create_user_safely
 
 
@@ -22,6 +35,17 @@ after a successful login, registration, or when intercepting unauthorized page a
 always land on their appropriate homepage.
 """
 def redirect_to_dashboard(request):
+=======
+
+# --- NEW: Import the Service ---
+from .services import create_user_safely
+
+def redirect_to_dashboard(request):
+    """
+    Helper function to redirect users to their correct dashboard 
+    based on their session role.
+    """
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     role = request.session.get('role')
     if role == 'client':
         return redirect('photographers_list')
@@ -32,6 +56,7 @@ def redirect_to_dashboard(request):
     return redirect('home')
 
 
+<<<<<<< HEAD
 """
 Manages the creation of new user accounts by processing the registration form data. 
 It accepts user credentials, contact details, profile imagery, and role-specific metrics. 
@@ -39,22 +64,35 @@ It delegates the actual database saving to the secure transaction method, establ
 upon success, blocks already logged-in users from accessing the page, and routes new users to their dashboard. 
 It serves as the core endpoint for platform onboarding.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @never_cache
 def register(request):
     if request.user.is_authenticated:
         return redirect_to_dashboard(request)
 
     if request.method == 'POST':
+<<<<<<< HEAD
         form = RegistrationForm(request.POST, request.FILES) 
         if form.is_valid():
             requested_role = form.cleaned_data['role']
             final_role = 'client' if requested_role == 'developer' else requested_role
 
+=======
+        # MUST INCLUDE request.FILES for the profile picture!
+        form = RegistrationForm(request.POST, request.FILES) 
+        if form.is_valid():
+            # Pass all the new data to the service
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             user, created = create_user_safely(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1'],
                 email=form.cleaned_data['email'],
+<<<<<<< HEAD
                 role=final_role,
+=======
+                role=form.cleaned_data['role'],
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
                 phone=form.cleaned_data.get('phone'),
                 address=form.cleaned_data.get('address'),
                 profile_picture=form.cleaned_data.get('profile_picture'),
@@ -68,6 +106,7 @@ def register(request):
                 messages.error(request, 'Username already taken.')
                 return render(request, 'accounts/register.html', {'form': form})
 
+<<<<<<< HEAD
             login(request, user)
             request.session['role'] = user.profile.role
             messages.success(request, 'Registration successful!')
@@ -84,6 +123,20 @@ It accepts a username and password via a POST request, validates them against th
 securely sets the role identifier within the session variables, and routes the user to the correct interface. 
 It actively prevents logged-in users from viewing the login screen again.
 """
+=======
+            # Success path
+            login(request, user)
+            request.session['role'] = user.profile.role
+            messages.success(request, 'Registration successful!')
+            
+            # Since they did everything on one page, skip setup and go straight to dashboard
+            return redirect_to_dashboard(request)
+    else:
+        form = RegistrationForm()
+    return render(request, 'accounts/register.html', {'form': form})
+
+
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @never_cache
 def login_view(request):
     if request.user.is_authenticated:
@@ -96,6 +149,10 @@ def login_view(request):
             login(request, user)
             messages.success(request, 'Login successful.')
             
+<<<<<<< HEAD
+=======
+            # Save role to session
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             try:
                 request.session['role'] = user.profile.role
             except Exception:
@@ -108,11 +165,14 @@ def login_view(request):
     return render(request, 'accounts/login.html', {'form': form})
 
 
+<<<<<<< HEAD
 """
 Terminates the current user's active session. 
 It accepts the request object, forces the clearance of any pending notification messages, 
 destroys the authentication tokens, and redirects the user safely back to the login screen.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @never_cache
 def logout_view(request):
     list(messages.get_messages(request))
@@ -120,11 +180,14 @@ def logout_view(request):
     return redirect('login')
 
 
+<<<<<<< HEAD
 """
 Allows photographers to update their foundational profile and professional business metrics simultaneously. 
 It verifies the active session role, loads both the Profile and Photographer models for the logged-in user, 
 and processes two separate update forms at once. It is utilized exclusively within the creator dashboard's settings.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @never_cache
 def photographer_setup(request):
@@ -134,6 +197,10 @@ def photographer_setup(request):
     photographer, created = Photographer.objects.get_or_create(user=request.user)
     
     if request.method == 'POST':
+<<<<<<< HEAD
+=======
+        # Grab data for both forms
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         ph_form = PhotographerUpdateForm(request.POST, instance=photographer)
         
@@ -143,6 +210,7 @@ def photographer_setup(request):
             messages.success(request, 'Profile settings updated successfully!')
             return redirect('photographer_dashboard')
     else:
+<<<<<<< HEAD
         p_form = ProfileUpdateForm(instance=request.user.profile)
         ph_form = PhotographerUpdateForm(instance=photographer)
 
@@ -155,6 +223,16 @@ It ensures strict role access, automatically executes a cleanup query to reject 
 that have expired past their event date, and compiles the creator's portfolio items, historical bookings, 
 and incoming reviews while dynamically calculating their aggregate star rating.
 """
+=======
+        # Pre-fill with existing data
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+        ph_form = PhotographerUpdateForm(instance=photographer)
+
+    # Pass BOTH forms to the template
+    return render(request, 'accounts/photographer_setup.html', {'p_form': p_form, 'ph_form': ph_form})
+
+
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @never_cache
 def photographer_dashboard(request):
@@ -162,6 +240,7 @@ def photographer_dashboard(request):
         raise PermissionDenied
 
     photographer, created = Photographer.objects.get_or_create(user=request.user)
+<<<<<<< HEAD
 
     Booking.objects.filter(
         photographer=photographer,
@@ -190,6 +269,20 @@ def photographer_dashboard(request):
 Retrieves and displays a visual grid of all portfolio images uploaded by the logged-in creator. 
 It accesses the Portfolio model filtered by the active user's identity to populate the gallery management screen.
 """
+=======
+    portfolios = Portfolio.objects.filter(photographer=photographer)
+    
+    # NEW: Get all bookings for this photographer, newest first
+    bookings = Booking.objects.filter(photographer=photographer).order_by('-created_at')
+
+    return render(request, 'accounts/photographer_dashboard.html', {
+        'photographer': photographer,
+        'portfolios': portfolios,
+        'bookings': bookings, # Pass bookings to the HTML
+    })
+
+
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @never_cache
 def portfolio_list(request):
@@ -201,11 +294,14 @@ def portfolio_list(request):
     return render(request, 'accounts/portfolio_list.html', {'items': items})
 
 
+<<<<<<< HEAD
 """
 Handles the submission and storage of new visual assets to a creator's public gallery. 
 It processes the uploaded file and text description, linking the new Portfolio record explicitly 
 to the active photographer before redirecting them back to their dashboard.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @never_cache
 def portfolio_create(request):
@@ -226,11 +322,14 @@ def portfolio_create(request):
     return render(request, 'accounts/portfolio_form.html', {'form': form})
 
 
+<<<<<<< HEAD
 """
 Permits a photographer to modify an existing portfolio entry. 
 It fetches the specific asset via its primary key, ensures it belongs to the authenticated user, 
 and updates the corresponding image file or descriptive text through a POST request.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @never_cache
 def portfolio_edit(request, pk):
@@ -252,11 +351,14 @@ def portfolio_edit(request, pk):
     return render(request, 'accounts/portfolio_form.html', {'form': form, 'item': item})
 
 
+<<<<<<< HEAD
 """
 Removes a specific image asset from a creator's gallery and triggers the file cleanup signals. 
 It requires the asset's primary key, verifies ownership, and necessitates a POST confirmation 
 to execute the permanent deletion from the database.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @never_cache
 def portfolio_delete(request, pk):
@@ -274,6 +376,7 @@ def portfolio_delete(request, pk):
     return render(request, 'accounts/confirm_delete.html', {'object': item})
 
 
+<<<<<<< HEAD
 """
 Generates the comprehensive public directory of all active creators. 
 It actively restricts access to prevent non-clients from browsing. It accepts query strings to filter results 
@@ -295,12 +398,16 @@ def photographers_list(request):
     search_query = request.GET.get('q', '')
     sort_by = request.GET.get('sort', '')
 
+=======
+def photographers_list(request):
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     photographers = (
         Photographer.objects.select_related('user')
         .filter(user__profile__role='photographer')
         .prefetch_related('portfolio_set')
         .annotate(
             portfolio_count=Count('portfolio'),
+<<<<<<< HEAD
             calculated_rating=Coalesce(Avg('photographer_bookings__review__rating'), Value(0.0))
         )
     )
@@ -351,6 +458,25 @@ def photographer_public(request, pk):
     portfolios = Portfolio.objects.filter(photographer=photographer)
     
     reviews = Review.objects.filter(booking__photographer=photographer).select_related('booking__client').order_by('-created_at')
+=======
+            # CHANGED: 'booking' is now 'photographer_bookings'
+            avg_rating=Avg('photographer_bookings__review__rating'),
+        )
+        .order_by('-avg_rating', '-portfolio_count')
+    )
+    return render(request, 'accounts/photographers.html', {'photographers': photographers})
+
+
+def photographer_public(request, pk):
+    photographer = get_object_or_404(Photographer, pk=pk)
+    portfolios = Portfolio.objects.filter(photographer=photographer)
+    
+    # NEW: Fetch all reviews for this photographer, newest first
+    # select_related makes the database query much faster since we need the client's username
+    reviews = Review.objects.filter(booking__photographer=photographer).select_related('booking__client').order_by('-created_at')
+    
+    # NEW: Calculate the average rating (out of 5)
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
 
     return render(request, 'accounts/photographer_public.html', {
@@ -361,29 +487,36 @@ def photographer_public(request, pk):
     })
 
 
+<<<<<<< HEAD
 """
 Serves as the primary operational hub for client accounts. 
 It enforces role authorization, automatically updates the status of expired, unanswered booking requests to rejected, 
 and aggregates all of the client's past and pending reservations, dynamically checking if a completed job 
 is still eligible to receive a review.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @never_cache
 def client_dashboard(request):
     if request.session.get('role') != 'client':
         raise PermissionDenied
 
+<<<<<<< HEAD
     Booking.objects.filter(
         client=request.user,
         status='pending',
         event_date__lt=timezone.now()
     ).update(status='rejected')
 
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     bookings_qs = Booking.objects.filter(client=request.user).order_by('-event_date')
     bookings = []
     for b in bookings_qs:
         has_review = hasattr(b, 'review')
         bookings.append({'obj': b, 'has_review': has_review})
+<<<<<<< HEAD
         
     return render(request, 'accounts/client_dashboard.html', {'bookings': bookings})
 
@@ -393,6 +526,11 @@ Allows standard clients to alter their personal contact information and avatar.
 It ensures the user maintains a client role and updates the underlying Profile model directly 
 from a POST request before routing them back to their primary hub.
 """
+=======
+    return render(request, 'accounts/client_dashboard.html', {'bookings': bookings})
+
+
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @never_cache
 def client_setup(request):
@@ -400,22 +538,35 @@ def client_setup(request):
         raise PermissionDenied
 
     if request.method == 'POST':
+<<<<<<< HEAD
         form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+=======
+        # We can reuse the exact same ProfileUpdateForm we made earlier!
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
             return redirect('client_dashboard')
     else:
+<<<<<<< HEAD
+=======
+        # Pre-fill the form with their current data
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
         form = ProfileUpdateForm(instance=request.user.profile)
 
     return render(request, 'accounts/client_setup.html', {'form': form})
 
 
+<<<<<<< HEAD
 """
 A custom authorization wrapper that strictly limits function execution to users holding the developer role. 
 It evaluates the session state prior to executing the targeted view, raising a hard permission denial 
 if any unauthorized user attempts access.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 def developer_required(func):
     @wraps(func)
     def wrapper(request, *args, **kwargs):
@@ -427,17 +578,25 @@ def developer_required(func):
     return wrapper
 
 
+<<<<<<< HEAD
 """
 Provides a comprehensive administrative overview panel exclusively for developer accounts. 
 It queries the database to segment and fetch lists of all registered photographers, clients, 
 and fellow developers, facilitating high-level management and auditing of platform user bases.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @developer_required
 @never_cache
 def developer_dashboard(request):
     User = get_user_model()
+<<<<<<< HEAD
     photographers = Photographer.objects.select_related('user').exclude(user__profile__role__in=['developer', 'client'])
+=======
+    photographers = Photographer.objects.select_related('user').exclude(
+    user__profile__role__in=['developer', 'client'])
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     clients = User.objects.filter(profile__role='client').select_related('profile')
     developers = User.objects.filter(profile__role='developer').select_related('profile')
     return render(request, 'accounts/developer_dashboard.html', {
@@ -447,11 +606,14 @@ def developer_dashboard(request):
     })
 
 
+<<<<<<< HEAD
 """
 Executes the permanent removal of a user account from the system by an administrator. 
 It requires the targeted user's primary key and employs strict safety constraints to prevent the deletion 
 of other developers or the administrator's own account. The deletion is finalized upon receiving a POST confirmation.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @developer_required
 @never_cache
@@ -477,17 +639,21 @@ def developer_delete_user(request, user_pk):
     return render(request, 'accounts/confirm_delete_user.html', {'user_obj': user})
 
 
+<<<<<<< HEAD
 """
 Intercepts application-wide permission denial errors to prevent users from seeing standard error pages. 
 If an authenticated user strays into restricted territory, it safely redirects them back to their designed dashboard. 
 If the user is a guest, they are routed to the login sequence.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 def custom_403_view(request, exception=None):
     if request.user.is_authenticated:
         return redirect_to_dashboard(request)
     return redirect('login')
 
 
+<<<<<<< HEAD
 """
 Initiates a new job reservation and communication lifecycle between a client and a photographer. 
 It accepts the targeted creator's ID, verifies the initiator is a valid client, and checks the database 
@@ -541,6 +707,8 @@ Captures post-event evaluation data and commentary from a client regarding a spe
 It requires the booking ID, authenticates that the job is strictly marked as completed, ensures the user 
 was the actual hiring client, and intercepts attempts to submit duplicate reviews for the same occasion.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @login_required
 @never_cache
 def add_review(request, booking_pk):
@@ -571,6 +739,7 @@ def add_review(request, booking_pk):
     return render(request, 'accounts/review_form.html', {'form': form, 'booking': booking})
 
 
+<<<<<<< HEAD
 """
 Facilitates state management for an active reservation by the hired creator. 
 It takes the booking ID and the desired status string (accepted, rejected, completed). 
@@ -590,6 +759,87 @@ def update_booking_status(request, booking_id, status):
             messages.error(request, "Access Blocked: You cannot finish this job before the scheduled event date and time!")
             return redirect('photographer_dashboard')
             
+=======
+@login_required
+def book_photographer(request, photographer_id):
+    # --- NEW SECURITY CHECK ---
+    # 1. Block photographers from acting as clients
+    if request.user.profile.role == 'photographer':
+        messages.error(request, "Access Denied: Photographer accounts cannot book other photographers. Please log in as a Client.")
+        # Redirect them away (change 'home' to your actual home or dashboard URL name)
+        return redirect('home') 
+
+    # 2. Find the photographer they are trying to book
+    photographer = get_object_or_404(Photographer, id=photographer_id)
+
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            # commit=False creates the object in memory, but doesn't hit the database yet
+            booking = form.save(commit=False)
+            
+            # Securely attach the 'Behind the Scenes' IDs
+            booking.client = request.user
+            booking.photographer = photographer
+            
+            # Save it to the database
+            booking.save()
+            
+            messages.success(request, f"Your booking request has been sent to {photographer.user.username}!")
+            return redirect('client_dashboard') # Change this to wherever they should go
+    else:
+        # Show an empty form
+        form = BookingForm()
+
+    context = {
+        'form': form,
+        'photographer': photographer
+    }
+    return render(request, 'accounts/book_photographer.html', context)
+
+
+@login_required
+@never_cache
+def add_review(request, booking_pk):
+    if request.session.get('role') != 'client':
+        raise PermissionDenied
+
+    booking = get_object_or_404(Booking, pk=booking_pk)
+    if booking.client != request.user:
+        raise PermissionDenied
+    if booking.status != 'completed':
+        messages.error(request, 'You can only review completed bookings.')
+        return redirect('client_dashboard')
+    if hasattr(booking, 'review'):
+        messages.error(request, 'This booking already has a review.')
+        return redirect('client_dashboard')
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.booking = booking
+            review.save()
+            messages.success(request, 'Review submitted.')
+            return redirect('client_dashboard')
+    else:
+        form = ReviewForm()
+
+    return render(request, 'accounts/review_form.html', {'form': form, 'booking': booking})
+
+
+@login_required
+def update_booking_status(request, booking_id, status):
+    """ Allows photographers to accept or reject a booking """
+    if request.session.get('role') != 'photographer':
+        raise PermissionDenied
+    
+    # Ensure they only edit THEIR bookings
+    booking = get_object_or_404(Booking, id=booking_id, photographer__user=request.user)
+    
+    # Security check: only allow valid statuses
+    if status in ['accepted', 'rejected', 'completed']:
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
         booking.status = status
         booking.save()
         messages.success(request, f"Booking has been marked as {status.title()}!")

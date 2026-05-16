@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 """
 Extends the default Django Base User model to store platform-specific identity information.
 It links one-to-one with the Base User and holds the account's primary role (client, 
@@ -13,6 +14,8 @@ photographer, or developer), alongside basic contact details and an avatar.
 This model is accessed globally across the application to determine user permissions, 
 route dashboards, and display profile headers.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class Profile(models.Model):
     ROLE_CHOICES = (
         ('client', 'Client'),
@@ -29,6 +32,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+<<<<<<< HEAD
 
 """
 Stores professional and business-specific details for accounts registered with the 
@@ -37,6 +41,8 @@ of professional experience, hourly booking rate, and operational city.
 This data is primarily queried by the public directory views to render search results, 
 sort creators, and populate the public-facing portfolio pages.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class Photographer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
@@ -47,6 +53,7 @@ class Photographer(models.Model):
     def __str__(self):
         return self.user.username
 
+<<<<<<< HEAD
 
 """
 Represents a single image upload within a photographer's public gallery.
@@ -55,6 +62,8 @@ file, an optional description, and an automatic timestamp of when it was uploade
 It is primarily used to render the visual grid on a photographer's public profile 
 page to showcase their work to potential clients.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class Portfolio(models.Model):
     photographer = models.ForeignKey(Photographer, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='portfolio/')
@@ -64,6 +73,7 @@ class Portfolio(models.Model):
     def __str__(self):
         return f"{self.photographer.user.username} Portfolio"
 
+<<<<<<< HEAD
 
 """
 Manages the reservation and lifecycle of a photoshoot event between a client and a photographer.
@@ -72,6 +82,8 @@ and the current state of the request (pending, accepted, rejected, or completed)
 This model serves as the core engine for both the Client and Photographer dashboards, 
 allowing both parties to manage their upcoming schedules and historical jobs.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class Booking(models.Model):
     STATUS_CHOICES = (
         ('pending', 'Pending'),
@@ -80,6 +92,7 @@ class Booking(models.Model):
         ('completed', 'Completed'),
     )
 
+<<<<<<< HEAD
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_bookings')
     photographer = models.ForeignKey(Photographer, on_delete=models.CASCADE, related_name='photographer_bookings')
     
@@ -89,11 +102,31 @@ class Booking(models.Model):
     notes = models.TextField(blank=True, null=True)
     
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+=======
+    PAYMENT_CHOICES = (
+        ('unpaid', 'Unpaid'),
+        ('partial', 'Partial Deposit'),
+        ('paid', 'Fully Paid'),
+        ('refunded', 'Refunded'),
+    )
+
+    client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_bookings')
+    photographer = models.ForeignKey(Photographer, on_delete=models.CASCADE, related_name='photographer_bookings')
+    
+    event_date = models.DateField()
+    event_type = models.CharField(max_length=100)
+    location = models.CharField(max_length=200)
+    message = models.TextField(blank=True, null=True)
+    
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='unpaid')
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+<<<<<<< HEAD
         return f"{self.client.username} → {self.photographer.user.username} ({self.event_date.strftime('%b %d, %Y')})"
 
 
@@ -104,6 +137,10 @@ clients can leave exactly one review per completed job.
 These records are aggregated to calculate a photographer's overall score on the 
 browse page and are displayed chronologically on their public profile.
 """
+=======
+        return f"{self.client.username} → {self.photographer.user.username}"
+
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 class Review(models.Model):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE)
     rating = models.IntegerField()
@@ -114,6 +151,7 @@ class Review(models.Model):
         return f"Review for {self.booking.photographer.user.username}"
 
 
+<<<<<<< HEAD
 """
 A Django post_delete signal receiver that automatically performs cleanup operations 
 on the server's file system.
@@ -121,6 +159,8 @@ It is triggered automatically whenever a Portfolio database record is deleted.
 It finds the physical image file associated with the deleted database entry and 
 removes it from the storage folder, preventing orphaned files from consuming server space.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @receiver(post_delete, sender=Portfolio)
 def delete_portfolio_image_on_delete(sender, instance, **kwargs):
     if not instance.image:
@@ -135,6 +175,7 @@ def delete_portfolio_image_on_delete(sender, instance, **kwargs):
     except Exception:
         logger.exception("Unexpected error deleting portfolio image %s", name)
 
+<<<<<<< HEAD
 
 """
 A Django pre_save signal receiver designed to manage file updates cleanly.
@@ -143,6 +184,8 @@ It compares the incoming new file with the existing old file. If the photographe
 is replacing the image, it deletes the old physical file from the server before 
 the new one is saved, avoiding storage bloat.
 """
+=======
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
 @receiver(pre_save, sender=Portfolio)
 def delete_old_portfolio_image_on_change(sender, instance, **kwargs):
     if not instance.pk:
@@ -167,6 +210,7 @@ def delete_old_portfolio_image_on_change(sender, instance, **kwargs):
         logger.exception("Unexpected error removing old portfolio image %s", name)
 
 
+<<<<<<< HEAD
 """
 A Django post_delete signal receiver responsible for cleaning up user avatars.
 It is triggered automatically whenever a user's Profile record is deleted (which 
@@ -179,6 +223,15 @@ def delete_profile_picture_on_delete(sender, instance, **kwargs):
     if not instance.profile_picture:
         return
         
+=======
+@receiver(post_delete, sender=Profile)
+def delete_profile_picture_on_delete(sender, instance, **kwargs):
+    """Deletes the profile picture when the user account is deleted."""
+    if not instance.profile_picture:
+        return
+        
+    # STOP! Never delete the default image!
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     if instance.profile_picture.name == 'profile_pictures/default.jpg':
         return
         
@@ -193,6 +246,7 @@ def delete_profile_picture_on_delete(sender, instance, **kwargs):
         logger.exception("Unexpected error deleting profile picture %s", name)
 
 
+<<<<<<< HEAD
 """
 A Django pre_save signal receiver that prevents abandoned avatars from accumulating.
 It is triggered automatically right before a user saves changes to their Profile.
@@ -202,6 +256,11 @@ ignores the transaction if the previous image was the system's default placehold
 """
 @receiver(pre_save, sender=Profile)
 def delete_old_profile_picture_on_change(sender, instance, **kwargs):
+=======
+@receiver(pre_save, sender=Profile)
+def delete_old_profile_picture_on_change(sender, instance, **kwargs):
+    """Deletes the old profile picture when a user uploads a new one."""
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     if not instance.pk:
         return
     try:
@@ -215,6 +274,10 @@ def delete_old_profile_picture_on_change(sender, instance, **kwargs):
     if not old_file or old_file == new_file:
         return
 
+<<<<<<< HEAD
+=======
+    # STOP! Never delete the default image!
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
     if old_file.name == 'profile_pictures/default.jpg':
         return
 

@@ -2,6 +2,7 @@ from django.db import transaction
 from django.contrib.auth.models import User
 from .models import Profile, Photographer
 
+<<<<<<< HEAD
 """
 Creates a new user account, their associated Profile, and optionally their Photographer setup safely using a database transaction.
 
@@ -36,6 +37,12 @@ Creates a new user account, their associated Profile, and optionally their Photo
 def create_user_safely(username, password, email, role, phone=None, address=None, profile_picture=None, bio=None, experience_years=0, price_per_hour=0, location=None):
     try:
         with transaction.atomic():
+=======
+def create_user_safely(username, password, email, role, phone=None, address=None, profile_picture=None, bio=None, experience_years=0, price_per_hour=0, location=None):
+    try:
+        with transaction.atomic():
+            # 1. Create User
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             user, created = User.objects.get_or_create(username=username, email=email)
             if not created:
                 return user, False
@@ -43,6 +50,10 @@ def create_user_safely(username, password, email, role, phone=None, address=None
             user.set_password(password)
             user.save()
 
+<<<<<<< HEAD
+=======
+            # 2. Update Profile (It might be auto-created by signals, so we get_or_create)
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             profile, _ = Profile.objects.get_or_create(user=user)
             profile.role = role
             if phone: profile.phone = phone
@@ -50,6 +61,10 @@ def create_user_safely(username, password, email, role, phone=None, address=None
             if profile_picture: profile.profile_picture = profile_picture
             profile.save()
 
+<<<<<<< HEAD
+=======
+            # 3. If Photographer, Create Photographer record
+>>>>>>> c9a0b83914e7670bca034a88e89d4a92ed5ff58f
             if role == 'photographer':
                 Photographer.objects.create(
                     user=user,
