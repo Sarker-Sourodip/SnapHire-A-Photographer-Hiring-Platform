@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Find a Photographer - SnapHire{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --snap-gold: #C8962B;
+        --snap-ink: #1A1A1A;
+        --snap-surface: #FDFBF7;
+        --snap-border: rgba(200, 150, 43, 0.2);
+    }
+    body { background-color: #F8F6F2; color: var(--snap-ink); }
+    .font-serif { font-family: 'DM Serif Display', serif; }
+    
+    .utility-bar { background: white; border: 1px solid var(--snap-border); border-radius: 16px; box-shadow: 0 4px 20px rgba(200, 150, 43, 0.05); }
+    .form-control-snap { width: 100%; border: 1px solid var(--snap-border); background: var(--snap-surface); border-radius: 8px; padding: 14px; font-size: 15px; }
+    .form-control-snap:focus { outline: none; border-color: var(--snap-gold); box-shadow: 0 0 0 3px rgba(200, 150, 43, 0.1); }
+    
+    .photographer-card { background: white; border: 1px solid var(--snap-border); border-radius: 14px; transition: transform 0.2s; }
+    .photographer-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(200, 150, 43, 0.08); }
+</style>
+
+<div class="container py-5">
+    
+    <div class="utility-bar p-4 mb-5">
+        <h1 class="font-serif display-5 mb-3" style="color: var(--snap-ink);">Discover Photographerss</h1>
+        <form method="GET" action="">
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="small fw-bold text-uppercase mb-2 text-muted">Search Photographers</label>
+                    <input type="text" name="q" class="form-control-snap" placeholder="" value="{{ search_query }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="small fw-bold text-uppercase mb-2 text-muted">Sort Results By</label>
+                    <select name="sort" class="form-control-snap" onchange="this.form.submit()">
+                        <option value="" {% if not sort_by %}selected{% endif %}>Recommended</option>
+                        <option value="rating_desc" {% if sort_by == 'rating_desc' %}selected{% endif %}>Highest Rated First</option>
+                        <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-dark w-100 fw-bold" style="height: 52px;">SEARCH</button>
+                    {% if search_query or sort_by %}
+                        <a href="{% url 'photographers_list' %}" class="btn btn-outline-danger d-flex align-items-center justify-content-center" style="height: 52px; width: 52px;">✕</a>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row g-4">
+        {% for p in photographers %}
+            <div class="col-md-6 col-lg-4">
+                <div class="photographer-card h-100 p-4 d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            {% if p.user.profile.profile_picture %}
+                                <img src="{{ p.user.profile.profile_picture.url }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--snap-surface);">
+                            {% else %}
+                                <div class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-weight: bold;">{{ p.user.username|first|upper }}</div>
+                            {% endif %}
+                            <div>
+                                <h3 class="font-serif h5 mb-0">{{ p.user.username }}</h3>
+                                <span class="small fw-bold text-muted">📍 {{ p.location|default:"Anywhere" }}</span>
+                            </div>
+                        </div>
+                        <div class="px-2 py-1 rounded" style="background: var(--snap-surface); border: 1px solid var(--snap-gold); color: var(--snap-gold); font-weight: bold; font-size: 13px;">
+                            {{ p.calculated_rating|floatformat:1 }} ★
+                        </div>
+                    </div>
+                    <p class="flex-grow-1" style="font-size: 14px; font-weight: 500;">{{ p.bio|default:"No bio available."|truncatewords:15 }}</p>
+                    <div class="border-top pt-3 mt-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="d-block text-uppercase fw-bold text-muted" style="font-size: 10px;">Starting at</span>
+                            <span class="h5 font-serif text-success mb-0">৳{{ p.price_per_hour }}<span style="font-size: 12px; color: gray;">/hr</span></span>
+                        </div>
+                        <a href="{% url 'photographer_public' p.id %}" class="btn btn-sm btn-outline-dark fw-bold px-3">View Profile</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <h3 class="font-serif text-muted">No photographers found</h3>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

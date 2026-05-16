@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirm Delete - SnapHire{% endblock %}
+
+{% block content %}
+<style>
+    .delete-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .delete-card {
+        background: var(--snap-surface);
+        border: 1px solid rgba(220, 53, 69, 0.2); /* Slight red tint to border */
+        border-radius: 16px;
+        padding: 40px;
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .warning-icon {
+        font-size: 3rem;
+        color: #DC3545;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    .form-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 2rem;
+        color: var(--snap-ink);
+        margin-bottom: 12px;
+    }
+
+    .warning-text {
+        color: var(--snap-muted);
+        font-size: 15px;
+        margin-bottom: 32px;
+        line-height: 1.6;
+    }
+
+    .btn-delete {
+        background: #DC3545; /* Destructive Red */
+        color: white !important;
+        font-weight: 700;
+        padding: 14px 30px;
+        border-radius: 8px;
+        border: none;
+        width: 100%;
+        margin-bottom: 15px;
+        transition: opacity 0.2s;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 14px;
+    }
+
+    .btn-delete:hover {
+        opacity: 0.9;
+    }
+
+    .cancel-link {
+        color: var(--snap-muted);
+        font-size: 13px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .cancel-link:hover {
+        color: var(--snap-ink);
+    }
+</style>
+
+<div class="delete-wrapper">
+    <div class="delete-card">
+        <span class="warning-icon">⚠️</span>
+        <h2 class="form-title">Confirm Deletion</h2>
+        <p class="warning-text">
+            Are you sure you want to delete this item? <br>
+            <strong>This action cannot be undone.</strong>
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn-delete shadow-sm">Yes, Delete Item</button>
+            <br>
+            <a href="javascript:history.back()" class="cancel-link">Nevermind, take me back</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

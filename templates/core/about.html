@@ -1,0 +1,605 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About — SnapHire BD{% endblock %}
+
+{% block content %}
+<style>
+    /* ================================================
+     ABOUT PAGE — SnapHire BD
+     Warm editorial style matching the gold/dark theme
+     ================================================ */
+
+    .about-hero {
+        background: linear-gradient(160deg, var(--snap-dark) 0%, #3d2a0f 60%, #1a1208 100%);
+        padding: 80px 0 60px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .about-hero::before {
+        content: '';
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(200, 150, 43, 0.12) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .about-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -40px;
+        left: -40px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(200, 150, 43, 0.07) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .about-hero-inner {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .about-eyebrow {
+        display: inline-block;
+        background: rgba(200, 150, 43, 0.15);
+        border: 1px solid rgba(200, 150, 43, 0.3);
+        color: var(--snap-gold);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 5px 16px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+
+    .about-hero h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(36px, 6vw, 58px);
+        color: var(--snap-gold-lt);
+        margin-bottom: 16px;
+        line-height: 1.15;
+    }
+
+    .about-hero p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 16px;
+        max-width: 560px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+
+    /* ---- Decorative divider ---- */
+    .snap-divider {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 56px 0 40px;
+    }
+
+    .snap-divider::before,
+    .snap-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--snap-border);
+    }
+
+    .snap-divider span {
+        font-family: 'DM Serif Display', serif;
+        font-size: 20px;
+        color: var(--snap-gold);
+    }
+
+    /* ---- Section titles ---- */
+    .section-label {
+        display: inline-block;
+        background: rgba(200, 150, 43, 0.1);
+        border: 1px solid var(--snap-border);
+        color: var(--snap-gold);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 4px 14px;
+        border-radius: 20px;
+        margin-bottom: 12px;
+    }
+
+    .section-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(26px, 4vw, 36px);
+        color: var(--snap-text);
+        margin-bottom: 14px;
+        line-height: 1.2;
+    }
+
+    .section-body {
+        color: var(--snap-muted);
+        font-size: 15px;
+        line-height: 1.8;
+        max-width: 640px;
+    }
+
+    /* ---- Project info cards ---- */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-top: 32px;
+    }
+
+    .info-card {
+        background: var(--snap-surface);
+        border: 1px solid var(--snap-border);
+        border-radius: 14px;
+        padding: 22px 20px;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    body.dark-mode .info-card {
+        background: var(--snap-card-bg);
+    }
+
+    .info-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(200, 150, 43, 0.1);
+    }
+
+    .info-card-icon {
+        font-size: 28px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .info-card-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--snap-muted);
+        margin-bottom: 6px;
+    }
+
+    .info-card-value {
+        font-family: 'DM Serif Display', serif;
+        font-size: 18px;
+        color: var(--snap-text);
+    }
+
+    /* ---- Problem / Solution strip ---- */
+    .problem-strip {
+        background: linear-gradient(135deg, rgba(200, 150, 43, 0.07) 0%, rgba(200, 150, 43, 0.03) 100%);
+        border: 1px solid var(--snap-border);
+        border-radius: 18px;
+        padding: 40px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin: 32px 0;
+    }
+
+    @media (max-width: 640px) {
+        .problem-strip {
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+    }
+
+    body.dark-mode .problem-strip {
+        background: linear-gradient(135deg, rgba(200, 150, 43, 0.06) 0%, rgba(200, 150, 43, 0.02) 100%);
+    }
+
+    .ps-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .ps-label.problem {
+        color: #C0392B;
+    }
+
+    .ps-label.solution {
+        color: #2E7D52;
+    }
+
+    .ps-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 20px;
+        color: var(--snap-text);
+        margin-bottom: 10px;
+    }
+
+    .ps-body {
+        font-size: 14px;
+        color: var(--snap-muted);
+        line-height: 1.75;
+    }
+
+    .ps-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .ps-list li {
+        font-size: 14px;
+        color: var(--snap-muted);
+        padding: 4px 0;
+        line-height: 1.6;
+        display: flex;
+        gap: 8px;
+    }
+
+    .ps-list li::before {
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .ps-list.problem li::before {
+        content: '✗';
+        color: #C0392B;
+        font-weight: 700;
+    }
+
+    .ps-list.solution li::before {
+        content: '✓';
+        color: #2E7D52;
+        font-weight: 700;
+    }
+
+    /* ================================================
+     TEAM SECTION
+     ================================================ */
+    .team-section {
+        padding: 64px 0 80px;
+    }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 28px;
+        margin-top: 40px;
+    }
+
+    /* Member card */
+    .member-card {
+        background: var(--snap-surface);
+        border: 1px solid var(--snap-border);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        position: relative;
+    }
+
+    body.dark-mode .member-card {
+        background: var(--snap-card-bg);
+    }
+
+    .member-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 48px rgba(200, 150, 43, 0.12);
+    }
+
+    /* Gold accent top bar */
+    .member-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--snap-gold), var(--snap-gold-lt));
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    .member-card:hover::before {
+        opacity: 1;
+    }
+
+    /* Photo area */
+    .member-photo-wrap {
+        height: 240px;
+        overflow: hidden;
+        position: relative;
+        background: var(--snap-tag);
+    }
+
+    .member-photo-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        transition: transform 0.4s ease;
+    }
+
+    .member-card:hover .member-photo-wrap img {
+        transform: scale(1.04);
+    }
+
+    /* Member number badge */
+    .member-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 32px;
+        height: 32px;
+        background: var(--snap-dark);
+        border: 1px solid rgba(200, 150, 43, 0.4);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'DM Serif Display', serif;
+        font-size: 14px;
+        color: var(--snap-gold-lt);
+        z-index: 2;
+    }
+
+    /* Card body */
+    .member-body {
+        padding: 22px 22px 24px;
+    }
+
+    .member-role {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--snap-gold);
+        margin-bottom: 6px;
+    }
+
+    .member-name {
+        font-family: 'DM Serif Display', serif;
+        font-size: 22px;
+        color: var(--snap-text);
+        margin-bottom: 14px;
+        line-height: 1.2;
+    }
+
+    /* Description box */
+    .member-desc-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--snap-muted);
+        margin-bottom: 8px;
+    }
+
+    .member-desc-box {
+        background: var(--snap-warm);
+        border: 1px solid var(--snap-border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        font-size: 13.5px;
+        color: var(--snap-muted);
+        line-height: 1.7;
+        font-style: italic;
+        min-height: 72px;
+    }
+
+    body.dark-mode .member-desc-box {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* ---- Footer tagline ---- */
+    .about-footer-strip {
+        background: linear-gradient(135deg, var(--snap-dark) 0%, #2b1a05 100%);
+        border-radius: 18px;
+        padding: 44px 40px;
+        text-align: center;
+        margin-bottom: 64px;
+    }
+
+    .about-footer-strip h3 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 28px;
+        color: var(--snap-gold-lt);
+        margin-bottom: 10px;
+    }
+
+    .about-footer-strip p {
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+
+    .btn-about-cta {
+        display: inline-block;
+        background: var(--snap-gold);
+        color: var(--snap-dark) !important;
+        padding: 12px 32px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 14px;
+        text-decoration: none;
+        transition: background 0.15s;
+    }
+
+    .btn-about-cta:hover {
+        background: var(--snap-gold-lt);
+    }
+</style>
+
+<!-- ===== HERO ===== -->
+<div class="about-hero">
+    <div class="container">
+        <div class="about-hero-inner">
+            <span class="about-eyebrow">About SnapHire BD</span>
+            <h1>Built for Bangladesh's<br>Creative Economy</h1>
+            <p>We're a team of three developers who believe every event deserves a great photographer — and every great
+                photographer deserves to be found.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== PROJECT SECTION ===== -->
+<div class="container" style="padding-top: 64px;">
+
+    <div class="row align-items-center g-5 mb-4">
+        <div class="col-lg-6">
+            <span class="section-label">The Project</span>
+            <h2 class="section-title">What is SnapHire BD?</h2>
+            <p class="section-body">
+                SnapHire BD is a two-sided marketplace that connects photography clients with professional photographers
+                across Bangladesh. It replaces the informal, WhatsApp-based hiring process with a structured platform
+                built on trust, portfolios, and verified reviews.
+            </p>
+            <p class="section-body" style="margin-top: 12px;">
+                Built as a university project using Django, it demonstrates real-world marketplace architecture —
+                role-based access, media uploads, booking flows, and fraud-resistant reviews.
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="info-card-icon">🎓</span>
+                    <div class="info-card-label">Type</div>
+                    <div class="info-card-value">University Project</div>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">🐍</span>
+                    <div class="info-card-label">Backend</div>
+                    <div class="info-card-value">Django 6</div>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">🗄️</span>
+                    <div class="info-card-label">Database</div>
+                    <div class="info-card-value">SQLite3</div>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">👥</span>
+                    <div class="info-card-label">Team Size</div>
+                    <div class="info-card-value">3 Members</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem / Solution -->
+    <div class="problem-strip">
+        <div>
+            <div class="ps-label problem">❌ The Problem</div>
+            <div class="ps-title">Before SnapHire</div>
+            <ul class="ps-list problem">
+                <li>Photographers found through word-of-mouth only</li>
+                <li>No way to compare portfolios or prices</li>
+                <li>Bookings done informally over WhatsApp</li>
+                <li>No accountability — fake reviews possible</li>
+                <li>No booking records or dispute resolution</li>
+            </ul>
+        </div>
+        <div>
+            <div class="ps-label solution">✅ The Solution</div>
+            <div class="ps-title">With SnapHire BD</div>
+            <ul class="ps-list solution">
+                <li>Browse verified photographer profiles & portfolios</li>
+                <li>Compare rates, location, and experience</li>
+                <li>Structured booking with status tracking</li>
+                <li>Reviews unlocked only after confirmed booking</li>
+                <li>Full dashboard for clients, photographers & admins</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="snap-divider">
+        <span>Meet the Team</span>
+    </div>
+
+</div>
+
+<!-- ===== TEAM SECTION ===== -->
+<div class="container team-section" style="padding-top: 0;">
+
+    <div style="text-align: center; margin-bottom: 8px;">
+        <span class="section-label">The Builders</span>
+        <h2 class="section-title" style="max-width:none;">The People Behind SnapHire BD</h2>
+        <p class="section-body" style="margin: 0 auto; text-align: center;">Three students, one shared vision — to
+            modernise how Bangladesh hires photographers.</p>
+    </div>
+
+    <div class="team-grid">
+
+        <!-- MEMBER 1: Sourodip Sarker -->
+        <div class="member-card">
+            <div class="member-photo-wrap">
+                <div class="member-badge">01</div>
+                <img src="{% static 'images/team/Sourodip.jpeg' %}" alt="Sourodip Sarker"
+                    onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg,#2b1f0e,#3d2a0f)'; this.parentElement.innerHTML += '<div style=\'position:absolute;inset:0;display:flex;align-items:center;justify-content:center\'><span style=\'font-size:72px;opacity:0.3\'>👨‍💻</span></div>'">
+            </div>
+            <div class="member-body">
+                <div class="member-role">Team Member · 01</div>
+                <div class="member-name">Sourodip Sarker</div>
+                <div class="member-desc-label">About</div>
+                <div class="member-desc-box">
+                    Working hard - sleepy head. Developed the backend and works on Nusrat's template. Find bugs to crush them.
+                </div>
+            </div>
+        </div>
+
+        <!-- MEMBER 2: Md. Tawffiquzzaman Uzzal -->
+        <div class="member-card">
+            <div class="member-photo-wrap">
+                <div class="member-badge">02</div>
+                <img src="{% static 'images/team/tawfiq.jpeg' %}" alt="Md. Tawffiquzzaman Uzzal"
+                    onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg,#2b1f0e,#3d2a0f)'; this.parentElement.innerHTML += '<div style=\'position:absolute;inset:0;display:flex;align-items:center;justify-content:center\'><span style=\'font-size:72px;opacity:0.3\'>👨‍💻</span></div>'">
+            </div>
+            <div class="member-body">
+                <div class="member-role">Team Member · 02</div>
+                <div class="member-name">Md. Tawffiquzzaman Uzzal</div>
+                <div class="member-desc-label">About</div>
+                <div class="member-desc-box">
+                    Idea generator. Visionary sense with charismatic look. Developed the system design and helped to build a better user experience.
+                </div>
+            </div>
+        </div>
+
+        <!-- MEMBER 3: Nusrat Srabony -->
+        <div class="member-card">
+            <div class="member-photo-wrap">
+                <div class="member-badge">03</div>
+                <img src="{% static 'images/team/nusrat.jpeg' %}" alt="Nusrat Srabony"
+                    onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg,#2b1f0e,#3d2a0f)'; this.parentElement.innerHTML += '<div style=\'position:absolute;inset:0;display:flex;align-items:center;justify-content:center\'><span style=\'font-size:72px;opacity:0.3\'>👩‍💻</span></div>'">
+            </div>
+            <div class="member-body">
+                <div class="member-role">Team Member · 03</div>
+                <div class="member-name">Nusrat Srabony</div>
+                <div class="member-desc-label">About</div>
+                <div class="member-desc-box">
+                    Frontend developr and UI designer. Worked in backend as well. Models.py was coded by her.
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end team-grid -->
+
+    <!-- CTA strip -->
+    <div class="about-footer-strip" style="margin-top: 64px;">
+        <h3>Want to work with a SnapHire photographer?</h3>
+        <p>Browse our verified photographers and book your event coverage today.</p>
+
+        {% if request.session.role == 'client' %}
+        <a href="{% url 'photographers_list' %}" class="btn-about-cta">Browse Photographers</a>
+        {% else %}
+        <a href="{% url 'login' %}?next={% url 'photographers_list' %}" class="btn-about-cta">Browse Photographers</a>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
