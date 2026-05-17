@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}FAQ - SnapHire{% endblock %}
+
+{% block content %}
+
+<style>
+
+.faq-section{
+    padding:80px 20px;
+}
+
+.faq-title{
+    text-align:center;
+    font-size:52px;
+    font-weight:700;
+    margin-bottom:60px;
+    color:#1f1f1f;
+    font-family:'DM Serif Display', serif;
+}
+
+.faq-container{
+    max-width:950px;
+    margin:auto;
+}
+
+.faq-card{
+    background:white;
+    border-radius:18px;
+    padding:28px;
+    margin-bottom:25px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+    transition:0.3s ease;
+    border-left:6px solid #C8962B;
+}
+
+.faq-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}
+
+.faq-question{
+    font-size:28px;
+    font-weight:700;
+    margin-bottom:14px;
+    color:#1f1f1f;
+}
+
+.faq-answer{
+    font-size:18px;
+    color:#5c5c5c;
+    line-height:1.8;
+}
+
+</style>
+
+<section class="faq-section">
+
+    <h1 class="faq-title">
+        Frequently Asked Questions
+    </h1>
+
+    <div class="faq-container">
+
+        {% for faq in faqs %}
+
+        <div class="faq-card">
+
+            <div class="faq-question">
+                {{ faq.question }}
+            </div>
+
+            <div class="faq-answer">
+                {{ faq.answer }}
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="faq-card">
+
+            <div class="faq-question">
+                No FAQs Added Yet
+            </div>
+
+            <div class="faq-answer">
+                Please add FAQs from the admin panel.
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

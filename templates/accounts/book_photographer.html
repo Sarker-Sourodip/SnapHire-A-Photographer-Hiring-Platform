@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book {{ photographer.user.username }} - SnapHire{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --snap-gold: #C8962B;
+        --snap-ink: #1A1A1A;
+        --snap-muted: #555555;
+        --snap-surface: #FDFBF7;
+        --snap-border: rgba(200, 150, 43, 0.2);
+    }
+
+    body { background-color: #F8F6F2; color: var(--snap-ink); }
+    .font-serif { font-family: 'DM Serif Display', serif; }
+
+    .booking-card {
+        background: white;
+        border: 1px solid var(--snap-border);
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(200, 150, 43, 0.05);
+        padding: 40px;
+        max-width: 600px;
+        margin: 40px auto;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--snap-gold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .btn-submit {
+        background: var(--snap-ink);
+        color: white;
+        font-weight: 800;
+        letter-spacing: 1px;
+        padding: 16px;
+        border-radius: 8px;
+        width: 100%;
+        border: none;
+        margin-top: 20px;
+        transition: background 0.2s;
+    }
+
+    .btn-submit:hover { background: var(--snap-gold); }
+</style>
+
+<div class="container">
+    <div class="booking-card">
+        <div class="text-center mb-4">
+            <h1 class="font-serif">Request a Booking</h1>
+            <p class="text-muted">You are requesting to hire <strong>{{ photographer.user.username }}</strong> at ৳{{ photographer.price_per_hour }}/hr.</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} shadow-sm fw-bold">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group mb-4">
+                {{ form.event_date.label_tag }}
+                {{ form.event_date }}
+                <small class="text-muted" style="font-size: 11px;">Select the exact date and time for your event.</small>
+            </div>
+
+            <div class="form-group mb-4">
+                {{ form.event_type.label_tag }}
+                {{ form.event_type }}
+            </div>
+
+            <div class="form-group mb-4">
+                {{ form.location.label_tag }}
+                {{ form.location }}
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="{{ form.notes.id_for_label }}">Special Notes & Vision</label>
+                {{ form.notes }}
+            </div>
+
+            <button type="submit" class="btn-submit">SEND BOOKING REQUEST</button>
+            <div class="text-center mt-3">
+                <a href="{% url 'photographer_public' photographer.id %}" class="text-muted fw-bold text-decoration-none" style="font-size: 13px;">← Cancel & Return</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const bookingDateInput = document.querySelector('input[type="datetime-local"]');
+        if (bookingDateInput) {
+            const currentSystemTime = new Date();
+            const year = currentSystemTime.getFullYear();
+            const month = String(currentSystemTime.getMonth() + 1).padStart(2, '0');
+            const day = String(currentSystemTime.getDate()).padStart(2, '0');
+            const hours = String(currentSystemTime.getHours()).padStart(2, '0');
+            const minutes = String(currentSystemTime.getMinutes()).padStart(2, '0');
+            
+            // Locks the calendar picker to the exact current minute
+            bookingDateInput.min = `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+    });
+</script>
+{% endblock %}
