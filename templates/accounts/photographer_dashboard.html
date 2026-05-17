@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Photographer Dashboard - SnapHire{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Welcome back, {{ request.user.username }}!</h2>
+        <a href="{% url 'photographer_setup' %}" class="btn btn-primary shadow-sm">
+            ⚙️ Edit Profile Settings
+        </a>
+    </div>
+
+    <!-- TOP SECTION: Profile & Portfolio -->
+    <div class="row">
+        <!-- LEFT COLUMN: Profile & Contact Info -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    
+                    <!-- Profile Picture -->
+                    {% if request.user.profile.profile_picture %}
+                        <img src="{{ request.user.profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle mb-3 border" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px; font-size: 3rem;">
+                            {{ request.user.username|make_list|first|upper }}
+                        </div>
+                    {% endif %}
+                    
+                    <h4 class="card-title text-primary">{{ request.user.username }}</h4>
+                    <p class="text-muted mb-3"><i class="bi bi-geo-alt-fill"></i> {{ photographer.location|default:"No location set" }}</p>
+                    
+                    <hr>
+                    
+                    <!-- Professional Stats -->
+                    <div class="d-flex justify-content-around mb-3 text-center">
+                        <div>
+                            <h5 class="mb-0">{{ photographer.experience_years }}</h5>
+                            <small class="text-muted">Years Exp.</small>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-success">${{ photographer.price_per_hour }}</h5>
+                            <small class="text-muted">Per Hour</small>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Contact Details -->
+                    <div class="text-start">
+                        <p class="mb-1"><strong>Email:</strong> {{ request.user.email }}</p>
+                        <p class="mb-1"><strong>Phone:</strong> {{ request.user.profile.phone|default:"Not provided" }}</p>
+                        <p class="mb-1"><strong>Address:</strong> {{ request.user.profile.address|default:"Not provided" }}</p>
+                    </div>
+
+                    <hr>
+
+                    <!-- Bio -->
+                    <div class="text-start">
+                        <p class="mb-1"><strong>Bio:</strong></p>
+                        <p class="small text-muted">{{ photographer.bio|default:"You haven't written a bio yet." }}</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Portfolio -->
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4 h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0">Your Portfolio</h5>
+                    <a href="{% url 'portfolio_create' %}" class="btn btn-sm btn-success">+ Add New Photo</a>
+                </div>
+                
+                <div class="card-body overflow-auto" style="max-height: 600px;">
+                    <div class="row">
+                        {% for p in portfolios %}
+                            <div class="col-sm-6 col-md-4 mb-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    {% if p.image %}
+                                        <img src="{{ p.image.url }}" class="card-img-top" alt="Portfolio Image" style="height: 200px; object-fit: cover;">
+                                    {% endif %}
+                                    <div class="card-body text-center p-2">
+                                        <p class="small text-muted mb-2 text-truncate" title="{{ p.description }}">
+                                            {{ p.description|default:"No description" }}
+                                        </p>
+                                        <div class="btn-group w-100">
+                                            <a href="{% url 'portfolio_edit' p.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                            <a href="{% url 'portfolio_delete' p.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="col-12 text-center py-4">
+                                <p class="text-muted mb-3">Your portfolio is currently empty. Add photos to attract more clients!</p>
+                                <a href="{% url 'portfolio_create' %}" class="btn btn-primary">Add Your First Photo</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM SECTION: Booking Requests Panel -->
+    <div class="row mt-2">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0">Incoming Booking Requests</h5>
+                </div>
+                
+                <!-- Beautifully styled table for requests -->
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Client</th>
+                                    <th>Date</th>
+                                    <th>Event Type</th>
+                                    <th>Location</th>
+                                    <th>Message</th>
+                                    <th class="text-center pe-4">Status / Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for b in bookings %}
+                                <tr>
+                                    <td class="fw-bold ps-4">{{ b.client.username }}</td>
+                                    <td>{{ b.event_date }}</td>
+                                    <td><span class="badge bg-info text-dark">{{ b.event_type }}</span></td>
+                                    <td>{{ b.location }}</td>
+                                    <td class="small text-muted" title="{{ b.message }}">{{ b.message|default:"No message"|truncatewords:8 }}</td>
+                                    
+                                    <td class="text-center pe-4">
+                                        <!-- Pending Actions -->
+                                        {% if b.status == 'pending' %}
+                                            <div class="btn-group shadow-sm">
+                                                <a href="{% url 'update_booking_status' b.id 'accepted' %}" class="btn btn-sm btn-success">Accept</a>
+                                                <a href="{% url 'update_booking_status' b.id 'rejected' %}" class="btn btn-sm btn-danger">Reject</a>
+                                            </div>
+                                            
+                                        <!-- Accepted Actions -->
+                                        {% elif b.status == 'accepted' %}
+                                            <span class="badge bg-success">Accepted</span>
+                                            <!-- Lets them mark the job as finished once the shoot is over -->
+                                            <a href="{% url 'update_booking_status' b.id 'completed' %}" class="btn btn-sm btn-outline-primary ms-2" title="Mark as Done">Finish Job</a>
+                                            
+                                        <!-- Completed Status -->
+                                        {% elif b.status == 'completed' %}
+                                            <span class="badge bg-primary">Completed</span>
+                                            
+                                        <!-- Rejected Status -->
+                                        {% else %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-5">
+                                        You don't have any booking requests yet.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2>Register</h2>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <br>
+        <br>
+        <div class="mb-3">
+            {{ form.username.label_tag }} {{ form.username }}
+        </div>
+        <br>
+        <br>
+        <div class="mb-3">
+            {{ form.email.label_tag }} {{ form.email }}
+        </div>
+        <br>
+        <br>
+        <div class="mb-3">
+            {{ form.password1.label_tag }} {{ form.password1 }}
+        </div>
+        <br>
+        <br>
+        <div class="mb-3">
+            {{ form.password_confirm.label_tag }} {{ form.password_confirm }}
+        </div>
+        
+        <hr class="my-4">
+        <h4 class="text-primary mb-3">Profile Details</h4>
+        <br>
+        <br>
+        <div class="mb-3">
+            <label for="role-select" class="form-label">Role:</label>
+            <select name="role" class="form-select" id="role-select" required>
+                <option value="client" {% if form.role.value == 'client' %}selected{% endif %}>Client</option>
+                <option value="photographer" {% if form.role.value == 'photographer' %}selected{% endif %}>Photographer</option>
+            </select>
+        </div>
+        <br>
+        <br>
+        <div class="mb-3">
+            {{ form.phone.label_tag }} {{ form.phone }}
+        </div>
+        <br>
+        <br>
+        <div class="mb-3">
+            {{ form.address.label_tag }} {{ form.address }}
+        </div>
+        <br>
+        <br>
+        <div class="mb-3">
+            {{ form.profile_picture.label_tag }} {{ form.profile_picture }}
+        </div>
+        <br>
+        <br>
+        <div id="photographer-fields" style="display: none;" class="mt-4 p-4 bg-light border rounded shadow-sm">
+            <h4 class="text-primary">Photographer Details</h4>
+            <p class="text-muted small">Required to list your services in the directory.</p>
+            <br>
+            <br>
+            <div class="mb-3">
+                {{ form.location.label_tag }} {{ form.location }}
+            </div>
+            <br>
+            <br>
+            <div class="mb-3">
+                {{ form.price_per_hour.label_tag }} {{ form.price_per_hour }}
+            </div>
+            <br>
+            <br>
+            <div class="mb-3">
+                {{ form.experience_years.label_tag }} {{ form.experience_years }}
+            </div>
+            <br>
+            <br>
+            <div class="mb-3">
+                {{ form.bio.label_tag }} {{ form.bio }}
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-success btn-lg mt-4 px-5 shadow-sm">Create Account</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const roleSelect = document.getElementById('role-select'); 
+        const photographerFields = document.getElementById('photographer-fields');
+
+        function toggleFields() {
+            if (roleSelect.value === 'photographer') {
+                photographerFields.style.display = 'block';
+            } else {
+                photographerFields.style.display = 'none';
+            }
+        }
+
+        // Run on page load (in case of form validation errors)
+        toggleFields();
+
+        // Run every time the dropdown changes
+        roleSelect.addEventListener('change', toggleFields);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+<!-- book_photographer.html -->
+{% extends 'base.html' %} <!-- Assuming you have a base template -->
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Hire {{ photographer.user.username }}</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Display Photographer details (Optional but nice for UX) -->
+                    <div class="mb-4 p-3 bg-light rounded">
+                        <p><strong>Hourly Rate:</strong> ${{ photographer.price_per_hour }}/hr</p>
+                        <p><strong>Location:</strong> {{ photographer.location }}</p>
+                    </div>
+
+                    <!-- THE FORM -->
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        
+                        <br>
+                        <br>
+                        <!-- Render the form fields based on our widgets in forms.py -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Event Date</label>
+                            {{ form.event_date }}
+                        </div>
+                        <br>
+                        <br>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Type of Event</label>
+                            {{ form.event_type }}
+                        </div>
+                        <br>
+                        <br>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Location</label>
+                            {{ form.location }}
+                        </div>
+                        <br>
+                        <br>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Message / Details</label>
+                            {{ form.message }}
+                        </div>
+                        <br>
+                        <br>
+                        <button type="submit" class="btn btn-success w-100 mt-3">
+                            Send Booking Request
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

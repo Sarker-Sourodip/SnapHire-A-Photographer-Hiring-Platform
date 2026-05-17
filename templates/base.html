@@ -1,0 +1,100 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Home{% endblock %}</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'images/logo.jpeg'%}" alt="📸 SnapHire">
+      </a>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+
+        <ul class="navbar-nav me-auto">
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">Home</a>
+          </li>
+
+          <!-- Inside your navbar in base.html -->
+          {% if user.is_authenticated %}
+
+          <!-- Only show this link to Clients -->
+          {% if user.profile.role == 'client' %}
+          <li class="nav-item">
+            <a class="nav-link fw-bold text-primary" href="{% url 'photographers_list' %}">
+              Photographers
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% endif %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about' %}">About</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+          </li>
+
+        </ul>
+
+        <ul class="navbar-nav">
+
+          {% if user.is_authenticated %}
+
+          <li class="nav-item">
+            <a class="nav-link">Hello, {{ user.username }}</a>
+          </li>
+
+          <li class="nav-item">
+            {% if request.session.role == 'photographer' %}
+            <a class="nav-link" href="{% url 'photographer_dashboard' %}">Dashboard</a>
+            {% elif request.session.role == 'client' %}
+            <a class="nav-link" href="{% url 'client_dashboard' %}">Dashboard</a>
+            {% elif request.session.role == 'developer' %}
+            <a class="nav-link" href="{% url 'developer_dashboard' %}">Dashboard</a>
+            {% else %}
+            <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+            {% endif %}
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-danger" href="{% url 'logout' %}">Logout</a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn btn-primary ms-2" href="{% url 'register' %}">Register</a>
+          </li>
+
+          {% endif %}
+
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+  {% endblock %}
+
+</body>
+
+</html>
