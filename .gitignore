@@ -1,5 +1,2 @@
 .venv
-.idea
-.python-version
-db.sqlite3
-id and pass.txt
+.gitignore

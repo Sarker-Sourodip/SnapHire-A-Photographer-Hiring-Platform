@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b73c67f2-5bb2-4985-b376-b397868a8985" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/SnapHire-A-Photographer-Hiring-Platform.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SnapHire-A-Photographer-Hiring-Platform" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/forms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/migrations/0002_booking_payment_status_booking_updated_at_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/migrations/0003_profile_profile_picture.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/migrations/0004_alter_profile_profile_picture.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/migrations/0005_rename_message_booking_notes_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/services.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/id and pass.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/portfolio/screenshot.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/portfolio/screenshot_16TjcYu.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/portfolio/screenshot_9CHqqHS.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/portfolio/screenshot_GyPZcYS.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/portfolio/screenshot_RbYxfmF.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/portfolio/screenshot_Xy4hP9H.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/portfolio/screenshot_cTq93ri.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/portfolio/screenshot_ghrTVJr.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/profile_pictures/Meema.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/profile_pictures/Meema_OScbBu5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/profile_pictures/Meema_YZSrotn.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/profile_pictures/Meema_moqxXAY.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/profile_pictures/default.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectFile/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectFile/asgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectFile/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectFile/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectFile/wsgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/images/logo-without_backgraound.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/images/logo.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/images/team/Sourodip.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/images/team/nusrat.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/images/team/tawfiq.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/book_photographer.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/client_dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/client_setup.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/confirm_delete.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/confirm_delete_user.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/developer_dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/photographer_dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/photographer_public.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/photographer_setup.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/photographers.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/portfolio_form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/portfolio_list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/register.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/review_form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/core/about.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/core/contact.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/core/home.html" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;nusrat-srabony&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Sarker-Sourodip/SnapHire-A-Photographer-Hiring-Platform.git&quot;,
+    &quot;accountId&quot;: &quot;3f79eb9b-f26e-4fe6-8365-e8c2317f954a&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="3DoxicbtYSUuyy0iCKblm6f3laI" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Srabony-branch&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-4762d8aabb82-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.30387.173" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b73c67f2-5bb2-4985-b376-b397868a8985" name="Changes" comment="" />
+      <created>1778962352426</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1778962352426</updated>
+    </task>
+    <servers />
+  </component>
+</project>
